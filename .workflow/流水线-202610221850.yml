@@ -38,11 +38,12 @@ stages:
     name: ""
     displayName: Nodejs 构建
     nodeVersion: 20.20.1
-   commands:
-  - pwd
-  - cd ${GIT_CLONE_PATH}
-  - npm install
-  - npm run build
+    commands:
+    - pwd
+    - cd ${GIT_CLONE_PATH}
+    - npm config set registry https://registry.npmmirror.com
+    - npm install
+    - npm run build
     artifacts:
     - name: BUILD_ARTIFACT
       path:
