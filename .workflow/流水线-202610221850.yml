@@ -38,8 +38,11 @@ stages:
     name: ""
     displayName: Nodejs 构建
     nodeVersion: 20.20.1
-    commands:
-    - npm run build
+   commands:
+  - pwd
+  - cd ${GIT_CLONE_PATH}
+  - npm install
+  - npm run build
     artifacts:
     - name: BUILD_ARTIFACT
       path:
