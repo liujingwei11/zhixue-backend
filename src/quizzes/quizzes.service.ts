@@ -96,7 +96,15 @@ export class QuizzesService {
 
   async listSubmissions() {
     return this.submissions.find({
-      relations: { quiz: true, user: true },
+      relations: { quiz: { questions: true }, user: true },
+      order: { createdAt: 'DESC' },
+    });
+  }
+
+  async listMySubmissions(userId: number) {
+    return this.submissions.find({
+      where: { userId },
+      relations: { quiz: { questions: true } },
       order: { createdAt: 'DESC' },
     });
   }

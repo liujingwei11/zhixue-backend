@@ -1,0 +1,2446 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WLearn智学 · 学习工作台</title>
+<style>
+:root {
+  --n: #141413;
+  --n2: #1c2823;
+  --ink: #141413;
+  --ink-soft: #4a4843;
+  --muted: #78756e;
+  --line: #e6e3dc;
+  --line-soft: #f0ede6;
+  --bg: #f3f1ec;
+  --surface: #ffffff;
+  --surface-subtle: #faf9f6;
+  --o: #164e3e;
+  --o-hover: #0f392d;
+  --o-light: #e8f0ed;
+  --gold: #c59b6d;
+  --gold-light: #f9f3eb;
+  --b: #f3f1ec;
+  --g: #1f6f54;
+  --p: #2c5e6b;
+  --blue: #2c5e6b;
+  --radius-sm: 12px;
+  --radius-md: 20px;
+  --radius-lg: 26px;
+  --radius-xl: 32px;
+  --shadow-xs: 0 2px 6px rgba(20, 20, 19, 0.03);
+  --shadow-sm: 0 8px 24px -6px rgba(20, 20, 19, 0.05), 0 2px 6px -1px rgba(20, 20, 19, 0.03);
+  --shadow-md: 0 18px 40px -12px rgba(20, 20, 19, 0.09), 0 4px 12px -2px rgba(20, 20, 19, 0.04);
+  --shadow-lg: 0 30px 65px -15px rgba(20, 20, 19, 0.14), 0 10px 24px -6px rgba(20, 20, 19, 0.05);
+  --transition: 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #d5d1c8;
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #b8b3a8;
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(circle at 0% 0%, rgba(197, 155, 109, 0.08) 0%, transparent 45%),
+    radial-gradient(circle at 100% 100%, rgba(22, 78, 62, 0.06) 0%, transparent 45%);
+  background-attachment: fixed;
+  color: var(--ink);
+  font-family: "Inter", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", system-ui, -apple-system, sans-serif;
+  line-height: 1.55;
+  letter-spacing: -0.01em;
+}
+
+/* ==================== FLOATING BENTO APP SHELL & SIDEBAR ==================== */
+.app {
+  display: flex;
+  min-height: 100vh;
+  padding: 16px;
+  gap: 18px;
+}
+
+.side {
+  width: 266px;
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  color: var(--ink);
+  padding: 26px 18px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(20, 20, 19, 0.07);
+  border-radius: 28px;
+  box-shadow: var(--shadow-sm);
+  position: sticky;
+  top: 16px;
+  height: calc(100vh - 32px);
+  overflow-y: auto;
+  z-index: 7;
+  flex-shrink: 0;
+}
+
+.brand {
+  display: flex;
+  gap: 13px;
+  align-items: center;
+  margin: 2px 10px 26px;
+}
+
+.logo {
+  width: 42px;
+  height: 42px;
+  background: linear-gradient(140deg, #14221d 0%, #1c3b30 60%, #2a5a48 100%);
+  color: #e8d3b5;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  font-size: 19px;
+  box-shadow: 0 10px 22px -6px rgba(20, 34, 29, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.22);
+  flex-shrink: 0;
+}
+
+.brand b {
+  display: block;
+  font-size: 19px;
+  font-weight: 800;
+  letter-spacing: -0.4px;
+  color: var(--ink);
+}
+
+.brand small {
+  display: block;
+  color: #8c887f;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  margin-top: 2px;
+}
+
+.user {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  background: var(--surface-subtle);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 12px 14px;
+  margin-bottom: 22px;
+  transition: var(--transition);
+}
+.user:hover {
+  background: #ffffff;
+  box-shadow: var(--shadow-xs);
+}
+
+.avatar {
+  width: 38px;
+  height: 38px;
+  background: linear-gradient(135deg, #e6d5be 0%, #cfb28c 100%);
+  color: #3d2c19;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 14px;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.7), 0 3px 10px rgba(154, 118, 74, 0.18);
+  flex-shrink: 0;
+}
+
+.user div {
+  flex: 1;
+  min-width: 0;
+}
+.user b,
+.user small {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.user b {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.user small {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+nav {
+  display: grid;
+  gap: 5px;
+}
+
+nav button {
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--ink-soft);
+  border-radius: 14px;
+  padding: 12px 15px;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+nav button:hover {
+  background: var(--bg);
+  color: var(--ink);
+  transform: translateX(2px);
+}
+
+nav button.active {
+  background: #141413;
+  color: #faf9f6;
+  font-weight: 600;
+  box-shadow: 0 10px 24px -6px rgba(20, 20, 19, 0.25);
+}
+
+nav .ico {
+  font-size: 16px;
+  width: 22px;
+  text-align: center;
+  opacity: 0.85;
+}
+nav button.active .ico {
+  color: #dec39d;
+  opacity: 1;
+}
+
+nav em {
+  margin-left: auto;
+  background: #e8f0ed;
+  color: var(--o);
+  border-radius: 999px;
+  padding: 2px 9px;
+  font-size: 10px;
+  font-weight: 700;
+  font-style: normal;
+}
+nav button.active em {
+  background: rgba(222, 195, 157, 0.22);
+  color: #ebd5b3;
+}
+
+.side-bottom {
+  margin-top: auto;
+  padding-top: 18px;
+}
+
+.sprint {
+  background: linear-gradient(155deg, #faf9f5 0%, #f1eee7 100%);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 18px;
+}
+
+.sprint-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.live {
+  color: var(--o);
+  background: #e3efe9;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.sprint b {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 12px 0 5px;
+}
+
+.sprint p {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.5;
+  margin: 0 0 14px;
+}
+
+.bar {
+  height: 6px;
+  background: #e2dfd7;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.bar i {
+  display: block;
+  height: 100%;
+  width: 68%;
+  background: linear-gradient(90deg, #164e3e 0%, #c59b6d 100%);
+  border-radius: 999px;
+}
+
+.sprint small {
+  display: block;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 600;
+  margin-top: 9px;
+}
+
+/* ==================== TOP FLOATING HEADER ==================== */
+.main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.top {
+  height: 70px;
+  background: rgba(255, 255, 255, 0.84);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(20, 20, 19, 0.07);
+  border-radius: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px;
+  position: sticky;
+  top: 16px;
+  z-index: 6;
+  box-shadow: var(--shadow-xs);
+}
+
+.crumb {
+  font-size: 13px;
+  color: var(--muted);
+}
+.crumb b {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.top-actions {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  color: var(--ink-soft);
+}
+
+.api-status {
+  font-size: 11px;
+  font-weight: 600;
+  color: #8c6232;
+  background: #f9f2e7;
+  border: 1px solid #ead8be;
+  border-radius: 999px;
+  padding: 5px 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.api-status::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.api-status.connected {
+  color: #164e3e;
+  background: #e6f0ec;
+  border-color: #c5ddd3;
+}
+
+.switch-account {
+  border: 1px solid var(--line);
+  background: #ffffff;
+  color: var(--ink-soft);
+  border-radius: 12px;
+  padding: 8px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+.switch-account:hover {
+  border-color: #c9c4b8;
+  background: var(--surface-subtle);
+  color: var(--ink);
+}
+
+.search-top {
+  width: 220px;
+  padding: 9px 15px;
+  border: 1px solid var(--line);
+  background: var(--surface-subtle);
+  border-radius: 999px;
+  font-size: 12px;
+  color: var(--muted);
+  transition: var(--transition);
+}
+.search-top:hover {
+  background: #ffffff;
+  border-color: #cfc9bc;
+}
+
+.notice {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: #ffffff;
+  display: grid;
+  place-items: center;
+  font-size: 17px;
+  position: relative;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.notice:hover {
+  background: var(--surface-subtle);
+  transform: translateY(-1px);
+}
+.notice i {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #c59b6d;
+  box-shadow: 0 0 0 2px #fff;
+}
+
+.profile-wrap {
+  position: relative;
+}
+.avatar-button {
+  border: 0;
+  cursor: pointer;
+  font: inherit;
+  transition: var(--transition);
+}
+.avatar-button:hover {
+  transform: scale(1.05);
+}
+
+.profile-menu {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 48px;
+  width: 230px;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: var(--shadow-lg);
+  padding: 8px;
+  z-index: 25;
+  animation: popIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.profile-menu.open {
+  display: block;
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.profile-menu-head {
+  padding: 10px 12px 12px;
+  border-bottom: 1px solid var(--line-soft);
+  margin-bottom: 6px;
+}
+.profile-menu-head b,
+.profile-menu-head small {
+  display: block;
+}
+.profile-menu-head b {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.profile-menu-head small {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 3px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.profile-menu button {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  padding: 10px 12px;
+  border-radius: 11px;
+  color: var(--ink-soft);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+.profile-menu button:hover {
+  background: var(--bg);
+  color: var(--ink);
+}
+.profile-menu button:last-child {
+  color: #b43e2f;
+}
+.profile-menu button:last-child:hover {
+  background: #fdf2f0;
+}
+
+/* ==================== MAIN WORKSPACE CONTENT ==================== */
+.content {
+  width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 26px 8px 68px;
+}
+
+.view {
+  display: none;
+  animation: viewFade 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.view.active {
+  display: block;
+}
+
+@keyframes viewFade {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.eyebrow {
+  display: inline-block;
+  font-size: 10px;
+  letter-spacing: 1.8px;
+  color: #8c6d46;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+/* ==================== EDITORIAL LUXURY HERO & STATS ==================== */
+.hero {
+  background:
+    radial-gradient(circle at 86% 22%, rgba(197, 155, 109, 0.24), transparent 42%),
+    radial-gradient(circle at 12% 85%, rgba(36, 98, 78, 0.38), transparent 48%),
+    linear-gradient(135deg, #131917 0%, #182923 55%, #101514 100%);
+  color: #faf9f6;
+  min-height: 204px;
+  border-radius: var(--radius-xl);
+  padding: 38px 44px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 28px;
+  box-shadow: 0 22px 48px -14px rgba(19, 25, 23, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero .eyebrow {
+  color: #dec39d;
+  background: rgba(222, 195, 157, 0.12);
+  border: 1px solid rgba(222, 195, 157, 0.24);
+  padding: 4px 11px;
+  border-radius: 999px;
+}
+
+.hero h1 {
+  font-size: 32px;
+  font-weight: 800;
+  margin: 14px 0 10px;
+  letter-spacing: -0.8px;
+  color: #faf9f6;
+  line-height: 1.22;
+}
+
+.hero p {
+  font-size: 14px;
+  color: rgba(250, 249, 246, 0.74);
+  margin: 0;
+}
+
+.orb {
+  width: 148px;
+  height: 148px;
+  border-radius: 50%;
+  border: 1px solid rgba(222, 195, 157, 0.34);
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.04));
+  backdrop-filter: blur(14px);
+  display: grid;
+  place-items: center;
+  text-align: center;
+  color: #dec39d;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.24), 0 0 0 8px rgba(222, 195, 157, 0.05), inset 0 1px 1px rgba(255, 255, 255, 0.25);
+  padding: 18px;
+  flex-shrink: 0;
+}
+.orb b {
+  display: block;
+  font-size: 31px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  color: #ffffff;
+}
+.orb small {
+  font-size: 10px;
+  font-weight: 600;
+  color: rgba(250, 249, 246, 0.72);
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin: 22px 0;
+}
+
+.stat,
+.panel {
+  background: var(--surface);
+  border: 1px solid rgba(20, 20, 19, 0.07);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+}
+
+.stat:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  border-color: rgba(197, 155, 109, 0.45);
+}
+
+.stat span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.stat b {
+  display: block;
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  color: var(--ink);
+  margin: 10px 0 8px;
+}
+
+.stat small {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--o);
+  background: var(--o-light);
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+
+/* ==================== SECTION HEADERS & BUTTONS ==================== */
+.section-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin: 34px 0 18px;
+  gap: 16px;
+}
+
+.section-head h2 {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: var(--ink);
+  margin: 6px 0 0;
+}
+
+.section-head p[style] {
+  color: var(--muted) !important;
+  margin: 5px 0 0;
+}
+
+.link {
+  border: 0;
+  background: none;
+  color: var(--o);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 5px 8px;
+  border-radius: 8px;
+  transition: var(--transition);
+  font-family: inherit;
+}
+.link:hover {
+  color: var(--o-hover);
+  background: var(--o-light);
+}
+
+.primary {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: #141413;
+  color: #faf9f6;
+  border-radius: 12px;
+  padding: 10px 18px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 8px 20px -6px rgba(20, 20, 19, 0.3);
+  transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-family: inherit;
+}
+.primary:hover {
+  background: #164e3e;
+  transform: translateY(-1px);
+  box-shadow: 0 12px 24px -6px rgba(22, 78, 62, 0.35);
+}
+
+/* Harmonize inline-styled buttons and badges in JS */
+button.primary[style*="#35ad91"] {
+  background: #164e3e !important;
+  color: #faf9f6 !important;
+}
+button.primary[style*="#35ad91"]:hover {
+  background: #0f392d !important;
+}
+button.primary[style*="#f1efff"] {
+  background: var(--surface) !important;
+  color: var(--ink) !important;
+  border: 1px solid var(--line) !important;
+  box-shadow: var(--shadow-xs) !important;
+}
+button.primary[style*="#f1efff"]:hover {
+  background: var(--surface-subtle) !important;
+}
+
+.pill {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 7px 14px;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+button.pill:hover {
+  background: var(--bg);
+  color: var(--ink);
+}
+
+/* ==================== CONTINUE LEARNING & WEEKLY ==================== */
+.split {
+  display: grid;
+  grid-template-columns: 1.38fr 0.78fr;
+  gap: 18px;
+}
+
+.continue {
+  background: linear-gradient(145deg, #ffffff 0%, #faf8f4 100%);
+  color: var(--ink);
+  border-radius: var(--radius-lg);
+  padding: 26px;
+  display: flex;
+  gap: 24px;
+  min-height: 214px;
+  align-items: center;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(20, 20, 19, 0.08);
+}
+
+.continue > .continue {
+  padding: 0;
+  border: 0;
+  box-shadow: none;
+  background: transparent;
+  width: 100%;
+  min-height: auto;
+}
+
+.art {
+  height: 146px;
+  width: 210px;
+  border-radius: 18px;
+  padding: 22px;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+  display: flex;
+  align-items: flex-start;
+  border: 1px solid rgba(20, 20, 19, 0.05);
+}
+
+.art:before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 85% 20%, rgba(255, 255, 255, 0.65) 0%, transparent 50%),
+    radial-gradient(rgba(20, 20, 19, 0.06) 1px, transparent 1px);
+  background-size: 100% 100%, 16px 16px;
+}
+
+.art strong {
+  position: relative;
+  font-size: 44px;
+  font-weight: 800;
+  letter-spacing: -3px;
+  line-height: 1;
+}
+
+.art small {
+  position: absolute;
+  bottom: 14px;
+  right: 14px;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(8px);
+  padding: 4px 10px;
+  border-radius: 999px;
+  color: var(--ink);
+  box-shadow: 0 2px 8px rgba(20, 20, 19, 0.05);
+}
+
+/* Harmonized Low-Saturation Editorial Gallery Palette for Course Covers */
+.coral {
+  background: linear-gradient(135deg, #f5ebe4 0%, #ead6c7 100%);
+  color: #6e3b23;
+}
+.blue {
+  background: linear-gradient(135deg, #eaf0f2 0%, #d5e2e6 100%);
+  color: #244754;
+}
+.purple {
+  background: linear-gradient(135deg, #f1ecee 0%, #e2d6dc 100%);
+  color: #57384a;
+}
+.mint {
+  background: linear-gradient(135deg, #e7f0eb 0%, #cfe1d7 100%);
+  color: #1a4936;
+}
+.yellow {
+  background: linear-gradient(135deg, #f6f0e2 0%, #e9dec3 100%);
+  color: #6b5021;
+}
+.indigo {
+  background: linear-gradient(135deg, #eceef0 0%, #dadfe4 100%);
+  color: #323e4d;
+}
+
+.continue-info {
+  flex: 1;
+  min-width: 0;
+  padding: 4px 0;
+}
+
+.continue-info .eyebrow {
+  color: #8c6d46;
+}
+
+.continue-info button.link[style],
+.continue-info span[style*="#aab9cc"] {
+  color: var(--muted) !important;
+}
+
+.continue h2 {
+  font-size: 21px;
+  font-weight: 800;
+  letter-spacing: -0.4px;
+  margin: 10px 0 6px;
+  color: var(--ink);
+}
+
+.continue p {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 0 0 20px;
+}
+
+.line {
+  height: 8px;
+  border-radius: 999px;
+  background: #eae7df;
+  overflow: hidden;
+}
+
+.line i {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #164e3e 0%, #2b6f58 60%, #c59b6d 100%);
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+.continue-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.weekly {
+  background: var(--surface);
+  border: 1px solid rgba(20, 20, 19, 0.07);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.weekly div[style*="#ff9a80"] {
+  color: #164e3e !important;
+}
+
+.weekly .big {
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  color: var(--ink);
+  margin: 8px 0 2px;
+}
+.weekly .big small {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.weekly p {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 4px 0;
+}
+
+.bars {
+  display: flex;
+  height: 94px;
+  align-items: flex-end;
+  gap: 10px;
+  margin-top: 12px;
+  padding-top: 10px;
+}
+
+.bars div {
+  height: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+}
+
+.bars i {
+  width: 20px;
+  background: #e6e3dc;
+  border-radius: 6px 6px 3px 3px;
+  transition: var(--transition);
+}
+.bars div:hover i {
+  background: #c59b6d;
+}
+.bars div:nth-child(4) i {
+  background: linear-gradient(180deg, #1f5c48 0%, #14221d 100%);
+  box-shadow: 0 6px 14px -3px rgba(22, 78, 62, 0.35);
+}
+
+.bars small {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+/* ==================== COURSE CARDS & CATALOG ==================== */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid rgba(20, 20, 19, 0.07);
+  border-radius: 22px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
+  border-color: rgba(197, 155, 109, 0.5);
+}
+
+.card .art {
+  width: 100%;
+  height: 144px;
+  border-radius: 0;
+  border: 0;
+  border-bottom: 1px solid rgba(20, 20, 19, 0.05);
+}
+.card:hover .art strong {
+  transform: scale(1.05);
+  transition: transform 0.3s ease;
+}
+
+.body {
+  padding: 20px 22px 22px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.tag {
+  display: inline-block;
+  background: var(--bg);
+  color: var(--ink-soft);
+  border: 1px solid var(--line);
+  padding: 4px 11px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+  width: fit-content;
+}
+
+.rating {
+  float: right;
+  color: #8c6232;
+  background: #f9f3eb;
+  border: 1px solid #eadbc5;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.body h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 14px 0 8px;
+  letter-spacing: -0.3px;
+}
+
+.body p {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.55;
+  margin: 0;
+}
+
+.meta {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 500;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line-soft);
+}
+
+.course-progress {
+  margin-top: 16px;
+}
+.course-progress > div:first-child {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.course-progress b {
+  color: var(--o);
+}
+
+.smallline {
+  height: 6px;
+  background: var(--line-soft);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.smallline i {
+  display: block;
+  height: 100%;
+  background: var(--o);
+}
+
+.course-layout {
+  display: grid;
+  grid-template-columns: 234px 1fr;
+  gap: 22px;
+  align-items: start;
+}
+
+.filters {
+  position: sticky;
+  top: 102px;
+}
+
+.filters h3 {
+  font-size: 14px;
+  font-weight: 800;
+  margin: 0 0 16px;
+  color: var(--ink);
+}
+
+.filter-group {
+  border-top: 1px solid var(--line-soft);
+  padding: 16px 0;
+}
+.filter-group:first-of-type {
+  border: 0;
+  padding-top: 0;
+}
+
+.filter-group b {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 10px;
+}
+
+.filter-group label {
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  color: var(--ink-soft);
+  margin: 9px 0;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.filter-group label:hover {
+  color: var(--o);
+}
+
+.filter-group input {
+  margin-right: 9px;
+  accent-color: var(--o);
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+}
+
+.catalog-main .searchbar {
+  height: 52px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  padding: 0 18px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow-xs);
+  transition: var(--transition);
+}
+.catalog-main .searchbar:focus-within {
+  border-color: var(--o);
+  box-shadow: 0 0 0 4px rgba(22, 78, 62, 0.1);
+}
+
+.searchbar span {
+  font-size: 20px;
+  color: var(--muted);
+  margin-right: 10px;
+}
+
+.searchbar input {
+  flex: 1;
+  border: 0;
+  outline: 0;
+  font-size: 13px;
+  color: var(--ink);
+  background: transparent;
+  font-family: inherit;
+}
+
+.catalog-main .grid {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+/* ==================== PLANNER & CALENDAR ==================== */
+.planner {
+  display: grid;
+  grid-template-columns: 1.32fr 0.68fr;
+  gap: 20px;
+}
+
+.calendar-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+.calendar-head h3 {
+  font-size: 17px;
+  font-weight: 800;
+  margin: 0;
+}
+
+.calendar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+}
+
+.day {
+  border: 1px solid var(--line);
+  background: var(--surface-subtle);
+  border-radius: 14px;
+  min-height: 104px;
+  padding: 10px;
+  transition: var(--transition);
+}
+.day:hover {
+  background: #ffffff;
+  border-color: #cfc9bc;
+}
+
+.day b {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+
+.day em {
+  display: block;
+  font-size: 10px;
+  color: var(--muted);
+  font-style: normal;
+  margin-top: 3px;
+}
+
+.day.today {
+  border-color: var(--gold);
+  background: linear-gradient(180deg, #faf5ec 0%, #ffffff 100%);
+  box-shadow: 0 10px 22px -8px rgba(197, 155, 109, 0.28);
+}
+.day.today b {
+  color: #8c6232;
+}
+
+.task {
+  background: #e7f0ec;
+  color: #164e3e;
+  border-left: 3px solid #164e3e;
+  border-radius: 6px;
+  padding: 5px 7px;
+  margin-top: 10px;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.task.orange {
+  background: #f9f1e6;
+  color: #8c5828;
+  border-left-color: #c59b6d;
+}
+
+.todo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 8px;
+  border-bottom: 1px solid var(--line-soft);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink);
+  border-radius: 8px;
+  transition: var(--transition);
+  cursor: pointer;
+}
+.todo:hover {
+  background: var(--surface-subtle);
+}
+.todo input {
+  accent-color: var(--o);
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+/* ==================== QUIZ & TABLES ==================== */
+.quiz {
+  max-width: 880px;
+}
+
+#myFeedbackList div[style*="#f1efff"] {
+  background: #f7f4ee !important;
+  color: #5c4b37 !important;
+  border: 1px solid #e6dec8;
+}
+
+.question {
+  border-top: 1px solid var(--line-soft);
+  padding: 22px 0;
+}
+.question:first-child {
+  border: 0;
+}
+
+.question h3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 0 0 12px;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid var(--line);
+  background: var(--surface-subtle);
+  border-radius: 13px;
+  padding: 13px 16px;
+  margin: 8px 0;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.option:hover {
+  border-color: #b8b2a6;
+  background: #ffffff;
+}
+.option:has(input:checked) {
+  border-color: var(--o);
+  background: #ecf3f0;
+  color: var(--o-hover);
+  font-weight: 600;
+  box-shadow: 0 0 0 3px rgba(22, 78, 62, 0.1);
+}
+.option input[type="radio"] {
+  accent-color: var(--o);
+  width: 16px;
+  height: 16px;
+}
+
+.role-tabs {
+  display: flex;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.role-tabs button {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink-soft);
+  border-radius: 999px;
+  padding: 9px 20px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+.role-tabs button:hover {
+  border-color: #c2bdb2;
+  color: var(--ink);
+}
+.role-tabs button.active {
+  background: #141413;
+  color: #faf9f6;
+  border-color: #141413;
+  box-shadow: 0 8px 18px -6px rgba(20, 20, 19, 0.25);
+}
+
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 12px;
+}
+
+.table th,
+.table td {
+  text-align: left;
+  border-bottom: 1px solid var(--line-soft);
+  padding: 15px 14px;
+}
+
+.table th {
+  color: var(--muted);
+  font-weight: 700;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  background: var(--surface-subtle);
+}
+.table th:first-child {
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+.table th:last-child {
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.table tr:hover td {
+  background: var(--surface-subtle);
+}
+
+/* ==================== MODALS & TOAST ==================== */
+.modal-bg {
+  position: fixed;
+  inset: 0;
+  background: rgba(20, 20, 19, 0.52);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  z-index: 30;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal {
+  width: min(720px, 100%);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 28px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 32px 80px -16px rgba(20, 20, 19, 0.35);
+  animation: modalUp 0.26s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modalUp {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modal .art {
+  height: 180px;
+  width: 100%;
+  border-radius: 0;
+}
+
+.modal-close {
+  position: absolute;
+  right: 18px;
+  top: 18px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(8px);
+  color: var(--ink);
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  font-size: 20px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  z-index: 2;
+  transition: var(--transition);
+}
+.modal-close:hover {
+  background: #141413;
+  color: #ffffff;
+  transform: rotate(90deg);
+}
+
+.modal-body {
+  padding: 30px 34px 34px;
+}
+
+.modal-body h2 {
+  font-size: 23px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  margin: 10px 0 8px;
+  color: var(--ink);
+}
+
+.modal-body p {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.modal-stats {
+  display: flex;
+  gap: 36px;
+  flex-wrap: wrap;
+  background: var(--surface-subtle);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 16px 22px;
+  margin: 20px 0;
+}
+.modal-stats small,
+.modal-stats b {
+  display: block;
+}
+.modal-stats small {
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+.modal-stats b {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 32px;
+  transform: translateX(-50%);
+  background: #141413;
+  border: 1px solid rgba(222, 195, 157, 0.28);
+  color: #faf9f6;
+  padding: 12px 24px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  z-index: 60;
+  box-shadow: 0 18px 40px -8px rgba(20, 20, 19, 0.4);
+  animation: popIn 0.2s ease;
+}
+
+/* ==================== ROLE HOME & PROJECT BOARDS ==================== */
+.project-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.role-home-panel {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-top: 26px;
+}
+
+.role-home-card {
+  background: var(--surface);
+  border: 1px solid rgba(20, 20, 19, 0.07);
+  border-radius: 22px;
+  padding: 26px;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+}
+.role-home-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: rgba(197, 155, 109, 0.45);
+}
+
+.role-home-card .role-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  background: #e8f0ed;
+  color: var(--o);
+  display: grid;
+  place-items: center;
+  font-size: 20px;
+  margin-bottom: 16px;
+}
+
+.role-home-card h3 {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0 0 8px;
+  color: var(--ink);
+}
+
+.role-home-card p {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.6;
+  margin: 0 0 18px;
+}
+
+.role-home-card button {
+  border: 1px solid var(--line);
+  background: var(--surface-subtle);
+  color: var(--ink);
+  border-radius: 10px;
+  padding: 9px 15px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+.role-home-card button:hover {
+  background: #141413;
+  color: #ffffff;
+  border-color: #141413;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.kanban {
+  background: var(--surface-subtle);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 12px;
+  min-height: 150px;
+}
+.kanban h4 {
+  font-size: 11px;
+  font-weight: 700;
+  margin: 0 0 10px;
+  color: var(--muted);
+}
+
+.kanban-card {
+  background: #ffffff;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px;
+  margin: 8px 0;
+  font-size: 11px;
+}
+.kanban-card b {
+  display: block;
+  font-size: 11px;
+  margin-bottom: 5px;
+}
+.kanban-card small {
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.backlog {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+}
+.backlog th,
+.backlog td {
+  text-align: left;
+  border-bottom: 1px solid var(--line-soft);
+  padding: 12px 8px;
+}
+.backlog th {
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.priority {
+  border-radius: 999px;
+  padding: 3px 8px;
+  font-size: 10px;
+  font-weight: 600;
+}
+.high {
+  background: #fdf2f0;
+  color: #b43e2f;
+}
+.medium {
+  background: #f9f3eb;
+  color: #8c6232;
+}
+
+.done-badge {
+  background: #e7f0ec;
+  color: #164e3e;
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.arch {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+.arch-card {
+  border: 1px solid var(--line);
+  background: var(--surface-subtle);
+  border-radius: 12px;
+  padding: 14px;
+}
+.arch-card b {
+  display: block;
+  font-size: 13px;
+  margin-bottom: 7px;
+}
+.arch-card p {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.checks {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+.check {
+  background: var(--surface-subtle);
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 11px;
+  color: var(--ink-soft);
+}
+.check i {
+  color: var(--g);
+  font-style: normal;
+  margin-right: 6px;
+}
+
+.timeline {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+}
+.time-item {
+  border-top: 3px solid var(--o);
+  padding: 12px 10px;
+  background: var(--surface-subtle);
+  border-radius: 0 0 10px 10px;
+}
+.time-item b {
+  display: block;
+  font-size: 11px;
+}
+.time-item span {
+  display: block;
+  color: var(--muted);
+  font-size: 10px;
+  margin-top: 6px;
+  line-height: 1.5;
+}
+
+/* ==================== ARCHITECTURAL EDITORIAL LOGIN GATE ==================== */
+.login-gate {
+  position: fixed;
+  inset: 0;
+  background-color: #ebe7df;
+  background-image:
+    radial-gradient(circle at 18% 20%, rgba(197, 155, 109, 0.22), transparent 40%),
+    radial-gradient(circle at 84% 80%, rgba(22, 78, 62, 0.16), transparent 42%),
+    radial-gradient(rgba(20, 20, 19, 0.05) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 24px 24px;
+  display: grid;
+  place-items: center;
+  z-index: 50;
+  padding: 24px;
+  overflow-y: auto;
+}
+
+.login-card {
+  width: min(960px, 100%);
+  padding: 12px;
+  display: grid;
+  grid-template-columns: 0.94fr 1.06fr;
+  overflow: hidden;
+  border-radius: 34px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(24px);
+  border: 1px solid rgba(20, 20, 19, 0.08);
+  box-shadow: 0 40px 100px -20px rgba(20, 20, 19, 0.18), 0 12px 30px -10px rgba(20, 20, 19, 0.06);
+}
+
+.login-visual {
+  min-height: 590px;
+  padding: 42px 38px;
+  color: #faf9f6;
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 82% 18%, rgba(212, 180, 131, 0.25), transparent 45%),
+    radial-gradient(circle at 15% 85%, rgba(42, 111, 87, 0.4), transparent 50%),
+    linear-gradient(155deg, #121816 0%, #172822 52%, #0e1312 100%);
+  position: relative;
+  overflow: hidden;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.login-visual:before,
+.login-visual:after {
+  content: "";
+  position: absolute;
+  border: 1px solid rgba(222, 195, 157, 0.18);
+  border-radius: 50%;
+}
+.login-visual:before {
+  width: 340px;
+  height: 340px;
+  right: -140px;
+  top: -100px;
+}
+.login-visual:after {
+  width: 260px;
+  height: 260px;
+  left: -120px;
+  bottom: -80px;
+}
+
+.visual-logo {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  border-radius: 15px;
+  background: rgba(222, 195, 157, 0.14);
+  border: 1px solid rgba(222, 195, 157, 0.32);
+  color: #dec39d;
+  backdrop-filter: blur(10px);
+  display: grid;
+  place-items: center;
+  font-size: 22px;
+  z-index: 1;
+}
+
+.visual-kicker {
+  position: relative;
+  z-index: 1;
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+  margin-top: 26px;
+  color: #dec39d;
+  background: rgba(222, 195, 157, 0.1);
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(222, 195, 157, 0.22);
+}
+
+.login-visual h2 {
+  position: relative;
+  z-index: 1;
+  font-size: 33px;
+  font-weight: 800;
+  line-height: 1.24;
+  margin: 22px 0 14px;
+  letter-spacing: -0.9px;
+  color: #faf9f6;
+}
+.login-visual h2 strong {
+  color: #dec39d;
+}
+
+.login-visual p {
+  position: relative;
+  z-index: 1;
+  color: rgba(250, 249, 246, 0.72);
+  font-size: 13px;
+  line-height: 1.75;
+  max-width: 270px;
+}
+
+.visual-orbit {
+  position: absolute;
+  z-index: 1;
+  right: 34px;
+  bottom: 88px;
+  width: 142px;
+  height: 142px;
+  border: 1px solid rgba(222, 195, 157, 0.34);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.03));
+  backdrop-filter: blur(16px);
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.28), 0 0 0 8px rgba(222, 195, 157, 0.05);
+  padding: 16px;
+  color: #dec39d;
+}
+.visual-orbit b {
+  display: block;
+  font-size: 21px;
+  font-weight: 800;
+  color: #faf9f6;
+}
+.visual-orbit small {
+  display: block;
+  font-size: 10px;
+  color: rgba(250, 249, 246, 0.72);
+}
+
+.visual-footer {
+  position: absolute;
+  z-index: 1;
+  bottom: 28px;
+  left: 38px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1.4px;
+  color: rgba(250, 249, 246, 0.52);
+}
+
+.login-form {
+  padding: 38px 44px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.form-top .eyebrow {
+  color: #8c6d46;
+}
+
+.login-card h1 {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.7px;
+  margin: 8px 0 6px;
+  color: var(--ink);
+}
+
+.login-card > p,
+#authSubtitle {
+  font-size: 13px;
+  color: var(--muted);
+  margin: 0;
+}
+
+/* Segmented Pill Switcher for Auth Tabs */
+.auth-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  background: var(--bg);
+  padding: 5px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  margin: 22px 0 18px;
+}
+
+.auth-tab {
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  padding: 9px 12px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+.auth-tab:hover {
+  color: var(--ink);
+}
+.auth-tab.active {
+  background: #ffffff;
+  color: var(--ink);
+  font-weight: 700;
+  border-bottom: 0;
+  box-shadow: 0 2px 8px rgba(20, 20, 19, 0.08);
+}
+
+.account-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.account-choice {
+  border: 1px solid var(--line);
+  background: var(--surface-subtle);
+  border-radius: 15px;
+  padding: 12px 6px;
+  text-align: center;
+  cursor: pointer;
+  color: var(--ink-soft);
+  font-size: 11px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  transition: var(--transition);
+  font-family: inherit;
+}
+.account-choice:hover {
+  border-color: #c59b6d;
+  background: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-xs);
+}
+.account-choice.active {
+  border-color: #164e3e;
+  background: #eef4f1;
+  color: #164e3e;
+  font-weight: 700;
+  box-shadow: 0 0 0 3px rgba(22, 78, 62, 0.12);
+}
+.account-choice span {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: #ffffff;
+  border: 1px solid var(--line-soft);
+  font-size: 16px;
+  margin: 0 0 2px;
+}
+.account-choice.active span {
+  background: #164e3e;
+  color: #dec39d;
+  border-color: #164e3e;
+}
+.account-choice b {
+  font-size: 11px;
+}
+.account-choice small {
+  font-size: 9px;
+  color: var(--muted);
+}
+
+.demo-hint {
+  font-size: 11px !important;
+  color: var(--muted) !important;
+  margin: 2px 0 12px !important;
+}
+
+.login-field {
+  margin: 12px 0;
+}
+.login-field label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ink-soft);
+  margin-bottom: 6px;
+}
+
+.login-field input,
+.login-field select,
+.login-field textarea {
+  width: 100%;
+  height: 44px;
+  border: 1px solid var(--line) !important;
+  background: var(--surface-subtle);
+  border-radius: 12px !important;
+  padding: 0 14px;
+  outline: 0;
+  font-size: 13px;
+  color: var(--ink);
+  font-family: inherit;
+  transition: var(--transition);
+}
+.login-field textarea {
+  height: auto;
+  padding: 12px 14px;
+}
+.login-field input:focus,
+.login-field select:focus,
+.login-field textarea:focus {
+  border-color: var(--o) !important;
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(22, 78, 62, 0.1);
+}
+
+.password-wrap {
+  position: relative;
+}
+.password-wrap input {
+  padding-right: 60px;
+}
+.password-wrap button {
+  position: absolute;
+  right: 8px;
+  top: 7px;
+  border: 1px solid var(--line);
+  background: #ffffff;
+  color: var(--ink-soft);
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+.password-wrap button:hover {
+  background: var(--bg);
+  color: var(--ink);
+}
+
+.login-submit {
+  width: 100%;
+  height: 48px;
+  border: 0;
+  border-radius: 13px;
+  background: linear-gradient(135deg, #141413 0%, #1c2e28 100%);
+  color: #faf9f6;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  cursor: pointer;
+  margin-top: 10px;
+  box-shadow: 0 12px 28px -8px rgba(20, 20, 19, 0.38);
+  transition: var(--transition);
+  font-family: inherit;
+}
+.login-submit:hover {
+  background: linear-gradient(135deg, #164e3e 0%, #1f6b55 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 14px 30px -6px rgba(22, 78, 62, 0.4);
+}
+.login-submit:active {
+  transform: translateY(0);
+}
+
+.login-status {
+  min-height: 18px;
+  color: #b43e2f;
+  font-size: 11px;
+  font-weight: 600;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.secure-note {
+  text-align: center;
+  color: var(--muted);
+  font-size: 11px;
+  margin-top: 14px;
+}
+
+/* ==================== RESPONSIVE BREAKPOINTS ==================== */
+@media (max-width: 980px) {
+  .side {
+    width: 220px;
+  }
+  .split,
+  .planner,
+  .project-grid {
+    grid-template-columns: 1fr;
+  }
+  .role-home-panel {
+    grid-template-columns: 1fr;
+  }
+  .board {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 720px) {
+  .app {
+    padding: 10px;
+    gap: 10px;
+  }
+  .login-card {
+    grid-template-columns: 1fr;
+    padding: 8px;
+  }
+  .login-visual {
+    display: none;
+  }
+  .login-form {
+    padding: 28px 20px;
+  }
+  .account-choice small {
+    display: none;
+  }
+  .side {
+    width: 70px;
+    padding: 20px 10px;
+    top: 10px;
+    height: calc(100vh - 20px);
+  }
+  .brand {
+    margin: 0 4px 24px;
+    justify-content: center;
+  }
+  .brand > div:last-child,
+  .user div,
+  .sprint {
+    display: none;
+  }
+  .user {
+    justify-content: center;
+    padding: 8px;
+  }
+  nav button {
+    justify-content: center;
+    padding: 12px 8px;
+    font-size: 0;
+    gap: 0;
+  }
+  nav button .ico {
+    font-size: 18px;
+  }
+  nav button em {
+    display: none;
+  }
+  .top {
+    padding: 0 16px;
+    top: 10px;
+  }
+  .search-top {
+    display: none;
+  }
+  .content {
+    padding: 18px 4px 48px;
+  }
+  .hero {
+    padding: 26px 22px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .hero h1 {
+    font-size: 24px;
+  }
+  .orb {
+    width: 110px;
+    height: 110px;
+  }
+  .orb b {
+    font-size: 22px;
+  }
+  .stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .continue {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .continue .art {
+    width: 100%;
+  }
+  .grid,
+  .catalog-main .grid,
+  .arch,
+  .timeline,
+  .checks {
+    grid-template-columns: 1fr;
+  }
+  .course-layout {
+    grid-template-columns: 1fr;
+  }
+  .filters {
+    display: none;
+  }
+  .calendar {
+    gap: 4px;
+  }
+  .day {
+    min-height: 74px;
+    padding: 6px;
+  }
+  .task {
+    font-size: 9px;
+  }
+}
+</style>
+</head>
+<body>
+<div class="login-gate" id="loginGate"><div class="login-card"><div class="login-visual"><div class="visual-logo">✦</div><span class="visual-kicker">LEARN · PLAN · IMPROVE</span><h2>把学习变成<br><strong>看得见的成长</strong></h2><p>课程与学习工具，一站式完成。</p><div class="visual-orbit"><span>✦</span><b>WLearn智学</b><small>你的学习工作台</small></div><div class="visual-footer">ONLINE LEARNING PLATFORM</div></div><div class="login-form"><div class="form-top"><span class="eyebrow">WELCOME BACK</span><h1 id="authTitle">登录学习工作台</h1><p id="authSubtitle">登录后进入学习工作台。</p></div><div class="auth-tabs"><button class="auth-tab active" data-mode="login">登录</button><button class="auth-tab" data-mode="register">注册新账号</button></div><div class="account-list" id="accountList"><button class="account-choice" data-account="student"><span>♙</span><b>学生演示</b><small>student@zhixue.local</small></button><button class="account-choice" data-account="teacher"><span>♧</span><b>教师演示</b><small>teacher@zhixue.local</small></button><button class="account-choice" data-account="admin"><span>⚙</span><b>管理员演示</b><small>admin@zhixue.local</small></button></div><p class="demo-hint" id="demoHint">可选择演示账号，也可手动登录。</p><div class="login-field" id="nameField" style="display:none"><label>姓名</label><input id="loginName" placeholder="请输入姓名"></div><div class="login-field" id="roleField" style="display:none"><label>角色</label><select id="registerRole" style="height:44px;width:100%;border:1px solid var(--line);border-radius:8px;padding:0 10px;font-size:12px;outline:0"><option value="STUDENT">学生</option><option value="INSTRUCTOR">教师</option><option value="ADMIN">管理员</option></select></div><div class="login-field"><label>邮箱 / 手机号</label><input id="loginEmail" placeholder="请输入邮箱或手机号"></div><div class="login-field" id="phoneField" style="display:none"><label>手机号（选填）</label><input id="loginPhone" placeholder="请输入手机号"></div><div class="login-field"><label>密码</label><div class="password-wrap"><input id="loginPassword" type="password" placeholder="请输入密码"><button type="button" id="togglePassword">显示</button></div></div><button class="login-submit" id="loginSubmit">登录</button><div class="login-status" id="loginStatus"></div><div class="secure-note">⌁　你的账号信息仅用于本地演示登录</div></div></div></div><div class="app" id="appShell" style="display:none"><aside class="side"><div class="brand"><div class="logo">✦</div><div><b>WLearn智学</b><small>LEARN · PLAN · IMPROVE</small></div></div><div class="user"><div class="avatar" id="currentAvatar">林</div><div><b id="currentUserName">林同学</b><small id="currentRoleName">学习者账户</small></div></div><nav><button class="active" data-view="home"><span class="ico">⌂</span>学习总览</button><button data-view="catalog"><span class="ico">▦</span>课程中心</button><button data-view="learning"><span class="ico">◒</span>我的学习 <em>1</em></button><button data-view="planner"><span class="ico">□</span>学习计划</button><button data-view="quiz"><span class="ico">✓</span>测验与反馈</button><button data-view="roles"><span class="ico">♙</span>教师/管理员</button><button data-view="teacherStudents"><span class="ico">♙</span>学生管理</button><button data-view="teacherFeedback"><span class="ico">✓</span>测验反馈</button><button data-view="adminUsers"><span class="ico">♙</span>用户管理</button><button data-view="adminAudit"><span class="ico">✓</span>课程审核</button></nav><div class="side-bottom"><div class="sprint"><div class="sprint-head"><span>学习进度</span><span class="live">● 进行中</span></div><b>课程发现与学习追踪</b><p>本周目标：完成课程学习流程</p><div class="bar"><i></i></div><small>4 / 6 项任务已完成</small></div></div></aside>
+<main class="main"><header class="top"><div class="crumb">工作台　/　<b id="crumb">学习总览</b></div><div class="top-actions"><span class="api-status" id="apiStatus">离线</span><button class="switch-account" onclick="logout()">退出登录</button><div class="search-top">⌕　搜索课程或功能</div><div class="notice">♧<i></i></div><div class="profile-wrap"><button class="avatar avatar-button" id="topAvatar" onclick="toggleProfileMenu(event)" aria-label="打开个人菜单">林</button><div class="profile-menu" id="profileMenu"><div class="profile-menu-head"><b id="menuUserName">林同学</b><small id="menuUserEmail">student@zhixue.local</small></div><button onclick="openProfile('info')">个人资料</button><button onclick="openProfile('password')">修改密码</button><button onclick="logout()">退出登录</button></div></div></div></header><div class="content">
+<section class="view active" id="home"><div class="hero"><div><span class="eyebrow">PERSONAL LEARNING OS</span><h1>把今天的学习，变成明天的能力。</h1><p>欢迎回来，林同学。你已经连续学习 5 天。</p></div><div class="orb">◒<b id="homeOrb">0%</b><small>本周学习完成度</small></div></div><div class="stats"><div class="stat"><span>学习完成度</span><b>68%</b><small>↑ 12% 较上周</small></div><div class="stat"><span>我的课程</span><b>0</b><small>已加入课程</small></div><div class="stat"><span>连续学习</span><b>05 天</b><small>保持你的节奏</small></div><div class="stat"><span>学习积分</span><b>820</b><small>↑ 86 本周获得</small></div></div><div class="section-head"><div><span class="eyebrow">YOUR NEXT STEP</span><h2>继续学习</h2></div><button class="link" data-go="learning">查看我的学习　→</button></div><div class="split"><div class="continue" id="homeContinue"></div><div class="weekly"><span class="eyebrow">THIS WEEK</span><div class="big">3.5 <small>小时</small></div><p>学习时长　↑ 38 分钟较上周</p><div class="bars"><div><i style="height:42%"></i><small>一</small></div><div><i style="height:68%"></i><small>二</small></div><div><i style="height:30%"></i><small>三</small></div><div><i style="height:88%"></i><small>四</small></div><div><i style="height:55%"></i><small>五</small></div><div><i style="height:20%"></i><small>六</small></div><div><i style="height:8%"></i><small>日</small></div></div></div></div><div class="section-head"><div><span class="eyebrow">RECOMMENDED FOR YOU</span><h2>为你推荐</h2></div><button class="link" data-go="catalog">查看全部　→</button></div><div class="grid" id="homeGrid"></div></section>
+<section class="view" id="catalog"><div class="section-head"><div><span class="eyebrow">EXPLORE COURSES</span><h2>课程中心</h2></div><span class="pill">课程发现</span></div><div class="course-layout"><aside class="panel filters"><h3>筛选课程</h3><div class="filter-group"><b>课程类别</b><label><input type="checkbox" data-cat="" checked>全部课程</label><label><input type="checkbox" data-cat="前端开发">前端开发</label><label><input type="checkbox" data-cat="编程基础">编程基础</label><label><input type="checkbox" data-cat="数据库">数据库</label></div><div class="filter-group"><b>难度等级</b><label><input type="checkbox" data-cat="入门">入门</label><label><input type="checkbox" data-cat="进阶">进阶</label></div><div class="filter-group"><b>排序方式</b><label><input type="radio" name="sort" data-sort="default" checked>推荐排序</label><label><input type="radio" name="sort" data-sort="rating">评分最高</label></div></aside><div class="catalog-main"><div class="searchbar"><span>⌕</span><input id="catalogSearch" placeholder="搜索课程标题、标签或技能"></div><div class="grid" id="catalogGrid"></div></div></div></section>
+<section class="view" id="learning"><div class="section-head"><div><span class="eyebrow">MY LEARNING</span><h2>我的学习</h2><p style="color:#7d8da1;font-size:12px">继续上次的学习，保持自己的节奏。</p></div><button class="primary" onclick="syncProgress()">同步进度 ↻</button></div><div class="split"><div class="continue" id="learningContinue"></div><div class="weekly"><span class="eyebrow">LEARNING STREAK</span><div class="big">05 <small>天</small></div><p>连续学习挑战</p><div style="color:#ff9a80;font-size:28px;letter-spacing:3px">●●●●●○○</div><p>再坚持 2 天，解锁新徽章</p></div></div><div class="section-head"><div><span class="eyebrow">AVAILABLE COURSES</span><h2>课程列表</h2></div></div><div class="grid" id="learningGrid"></div></section>
+<section class="view" id="planner"><div class="section-head"><div><span class="eyebrow">WEEKLY STUDY PLANNER</span><h2>学习计划</h2><p style="color:#7d8da1;font-size:12px">把课程目标拆成今天可以完成的任务。</p></div><button class="primary" onclick="openTaskForm()">＋ 新建任务</button></div><div class="planner"><div class="panel"><div class="calendar-head"><h3>2026 年 10 月 · 第 42 周</h3><span class="pill">本周目标 4 / 6</span></div><div class="calendar"><div class="day"><b>周一</b><em>10.12</em><div class="task">HTML · 第 3 课</div></div><div class="day"><b>周二</b><em>10.13</em><div class="task orange">完成练习题</div></div><div class="day today"><b>今天</b><em>10.14</em><div class="task">HTML · 第 4 课</div></div><div class="day"><b>周四</b><em>10.15</em><div class="task orange">测验 01</div></div><div class="day"><b>周五</b><em>10.16</em><div class="task">复习笔记</div></div><div class="day"><b>周六</b><em>10.17</em></div><div class="day"><b>周日</b><em>10.18</em></div></div></div><div class="panel"><span class="eyebrow">TODAY'S TASKS</span><h3>今天的学习任务</h3><div id="todoList"></div></div></div></section>
+<section class="view" id="quiz"><div class="section-head"><div><span class="eyebrow">ASSESSMENTS & FEEDBACK</span><h2>测验与反馈</h2><p style="color:#7d8da1;font-size:12px">用小测验确认理解，用反馈调整下一步学习。</p></div><span class="pill">HTML/CSS · 模块一</span></div><div class="panel quiz" id="quizPanel"><div id="quizList"></div></div><div id="myFeedbackList"></div></section>
+<section class="view" id="teacherStudents"><div class="section-head"><div><span class="eyebrow">TEACHER CENTER</span><h2>学生管理</h2><p style="color:#7d8da1;font-size:12px">查看学生正在学习的课程、完成度和最近学习时间。</p></div><span class="pill">3 名学生</span></div><div class="panel"><div id="studentsTable"></div></div></section><section class="view" id="teacherFeedback"><div class="section-head"><div><span class="eyebrow">ASSESSMENT CENTER</span><h2>测验与反馈</h2><p style="color:#7d8da1;font-size:12px">查看提交记录、批改状态并向学生发送反馈。</p></div><div style="display:flex;gap:10px"><button class="primary" onclick="openQuizEditor()">＋ 新建测验</button><button class="primary" style="background:#f1efff;color:#5b4fc1" onclick="loadSubmissions()">刷新列表 ↻</button></div></div><div class="grid" style="margin-bottom:18px"><div id="teacherQuizList" style="grid-column:1/-1"></div></div><div class="grid"><div id="feedbackList" style="grid-column:1/-1"></div></div></section><section class="view" id="adminUsers"><div class="section-head"><div><span class="eyebrow">ADMIN CENTER</span><h2>用户管理</h2><p style="color:#7d8da1;font-size:12px">查看账号、角色和状态，维护平台用户。</p></div><button class="primary" onclick="openUserEditor()">新增用户 +</button></div><div class="panel"><div id="usersTable"></div></div></section><section class="view" id="adminAudit"><div class="section-head"><div><span class="eyebrow">ADMIN CENTER</span><h2>课程审核</h2><p style="color:#7d8da1;font-size:12px">审核教师提交的课程并管理发布状态。</p></div><span class="pill">4 门待审核</span></div><div class="grid"><div id="auditList" style="grid-column:1/-1"></div></div></section><section class="view" id="roles"><div class="section-head"><div><span class="eyebrow">PROJECT USERS</span><h2>教师 / 管理员角色演示</h2><p style="color:#7d8da1;font-size:12px">对应 PPT 中的学习者、教师和管理员角色。</p></div></div><div class="role-tabs"><button class="active" data-role="student">学生端</button><button data-role="teacher">教师端</button><button data-role="admin">管理员端</button></div><div class="panel" id="roleContent"></div></section>
+
+</div></main></div><div id="modalRoot"></div>
+<script>
+
+var API_BASE = "http://localhost:3000/api";
+var accessToken = localStorage.getItem("zhixue_access_token") || "";
+var currentRole = "STUDENT";
+var currentUser = {};
+var backendConnected = false;
+var tasks = [];
+var quizList = [];
+var currentQuiz = null;
+var currentStats = {};
+var studentsList = [];
+var submissionsList = [];
+var usersList = [];
+var auditCourses = [];
+function toast(msg){var el=document.getElementById("toast");if(!el){el=document.createElement("div");el.id="toast";el.className="toast";document.body.appendChild(el)}el.textContent=msg;el.style.display="block";if(toast._t)clearTimeout(toast._t);toast._t=setTimeout(function(){el.style.display="none"},2600)}
+function apiRequest(path, options) {
+  options = options || {};
+  var headers = Object.assign({"Content-Type":"application/json"}, options.headers || {});
+  if (accessToken) headers.Authorization = "Bearer " + accessToken;
+  return fetch(API_BASE + path, Object.assign({}, options, {headers:headers})).then(function(res) {
+    return res.json().catch(function(){ return {}; }).then(function(data) {
+      if (!res.ok) throw new Error(data.message || "API request failed");
+      return data;
+    });
+  });
+}
+function mapBackendCourse(c) {
+  var tags = typeof c.tags === "string" ? c.tags.split(",") : [];
+  var colors = ["coral","blue","purple","mint","yellow","indigo"];
+  var marks = ["</>","JS","◌","⌘","SQL","✓"];
+  var index = Number(c.id || 0) - 1;
+  var total = c.lessons ? c.lessons.length : 0;
+  return {backendId:c.id,title:c.title,desc:c.description,cat:tags[0] || "软件工程",color:colors[index % colors.length],lessons:total,time:Math.max(3,Math.ceil(total/3))+" 周",rating:String(c.rating || "4.8"),students:"—",mark:marks[index % marks.length],status:c.status||"PUBLISHED"};
+}
+function normalizeRole(roleName){var r=String(roleName||"STUDENT").toUpperCase();return r==="TEACHER"?"INSTRUCTOR":r}
+function configureRole(roleName,userName){currentRole=normalizeRole(roleName);var isStudent=currentRole==="STUDENT",isTeacher=currentRole==="INSTRUCTOR",visible=isStudent?["home","catalog","learning","planner","quiz"]:isTeacher?["home","catalog","roles","teacherStudents","teacherFeedback"]:["home","catalog","roles","adminUsers","adminAudit"];document.querySelectorAll("nav button").forEach(function(btn){var show=visible.indexOf(btn.dataset.view)>-1;btn.style.display=show?"flex":"none";if(btn.dataset.view==="roles"){btn.innerHTML=isTeacher?'<span class="ico">♧</span>教师工作台':'<span class="ico">⚙</span>平台管理'}});var home=document.getElementById("home"),title=home.querySelector(".hero h1"),welcome=home.querySelector(".hero p"),stats=home.querySelector(".stats"),homeHeads=home.querySelectorAll(":scope > .section-head"),studentSplit=home.querySelector(":scope > .split"),homeGrid=document.getElementById("homeGrid"),roleHomePanel=document.getElementById("roleHomePanel");if(!roleHomePanel){roleHomePanel=document.createElement("div");roleHomePanel.id="roleHomePanel";roleHomePanel.className="role-home-panel";home.appendChild(roleHomePanel)}var isStudentHome=isStudent;home.querySelector(".orb").style.display=isStudentHome?"grid":"none";if(homeHeads[0])homeHeads[0].style.display=isStudentHome?"flex":"none";if(studentSplit)studentSplit.style.display=isStudentHome?"grid":"none";if(homeHeads[1])homeHeads[1].style.display=isStudentHome?"flex":"none";homeGrid.style.display=isStudentHome?"grid":"none";roleHomePanel.style.display=isStudentHome?"none":"grid";if(isTeacher){roleHomePanel.innerHTML='<div class="role-home-card"><div class="role-icon">♧</div><h3>课程管理</h3><p>创建课程、安排课时、发布教学内容。</p><button onclick="openCreateCourse()">新增课程 →</button></div><div class="role-home-card"><div class="role-icon">♙</div><h3>学生情况</h3><p>查看学生正在学习的课程和完成度。</p><button onclick="switchView(&quot;teacherStudents&quot;)">查看学生 →</button></div><div class="role-home-card"><div class="role-icon">✓</div><h3>测验与反馈</h3><p>查看待批改测验并发布课程反馈。</p><button onclick="switchView(&quot;teacherFeedback&quot;)">打开反馈 →</button></div>'}else if(!isStudent){roleHomePanel.innerHTML='<div class="role-home-card"><div class="role-icon">⚙</div><h3>用户与角色</h3><p>维护平台用户、账号状态和角色权限。</p><button onclick="switchView(&quot;adminUsers&quot;)">管理用户 →</button></div><div class="role-home-card"><div class="role-icon">✓</div><h3>课程审核</h3><p>审核课程状态、发布信息和内容规范。</p><button onclick="switchView(&quot;adminAudit&quot;)">审核课程 →</button></div>'}if(isStudent){title.textContent="把今天的学习，变成明天的能力。";welcome.textContent="欢迎回来，"+(userName||"同学")+"。继续完成你的学习计划。";renderStudentStats();role("student")}else if(isTeacher){title.textContent="让每一门课程，都更有价值。";welcome.textContent="欢迎回来，"+(userName||"老师")+"。这里是你的教学工作台。";stats.innerHTML='<div class="stat"><span>我的课程</span><b>08</b><small>2 门待更新</small></div><div class="stat"><span>学习者人数</span><b>328</b><small>本周新增 16 人</small></div><div class="stat"><span>待批改测验</span><b>24</b><small>需要及时处理</small></div><div class="stat"><span>课程评分</span><b>4.9</b><small>高于平台平均值</small></div>';role("teacher")}else{title.textContent="掌控平台运行的每一个关键环节。";welcome.textContent="欢迎回来，"+(userName||"管理员")+"。这里是平台管理工作台。";stats.innerHTML='<div class="stat"><span>注册用户</span><b>2,480</b><small>↑ 8.6% 本月</small></div><div class="stat"><span>已发布课程</span><b>36</b><small>4 门待审核</small></div><div class="stat"><span>平台活跃度</span><b>86%</b><small>运行状态良好</small></div><div class="stat"><span>系统可用性</span><b>99.9%</b><small>近 30 天</small></div>';role("admin")}switchView("home")}
+async function enterWorkspace(login){accessToken=login.accessToken;localStorage.setItem("zhixue_access_token",accessToken);currentUser=login.user||{};var user=currentUser,roleName=normalizeRole(user.role||"STUDENT"),list=await apiRequest("/courses"),mine=[];if(roleName==="STUDENT"){try{mine=await apiRequest("/enrollments/me")}catch(e){mine=[]}}var enrolled={};(mine||[]).forEach(function(item){enrolled[item.courseId]=item});if((list||[]).length){var backendCourses=list.map(mapBackendCourse);courses=backendCourses.concat(courses.slice(backendCourses.length))}courses.forEach(function(c){var item=enrolled[c.backendId];if(item){c.enrollmentId=item.id;c.progress=Number(item.progressPercent||0);c.completedLessons=Number(item.progress&&item.progress.completedLessons||0);c.totalLessons=Number(item.progress&&item.progress.totalLessons||c.lessons||0)}});backendConnected=true;document.getElementById("loginGate").style.display="none";document.getElementById("appShell").style.display="flex";document.getElementById("apiStatus").textContent="在线";document.getElementById("apiStatus").classList.add("connected");var name=user.name||"学习者";document.getElementById("currentUserName").textContent=name;document.getElementById("currentRoleName").textContent=roleName==="ADMIN"?"管理员账户":roleName==="INSTRUCTOR"?"教师账户":"学习者账户";document.getElementById("currentAvatar").textContent=name.slice(0,1);document.getElementById("topAvatar").textContent=name.slice(0,1);document.getElementById("menuUserName").textContent=name;document.getElementById("menuUserEmail").textContent=user.email||"";render();configureRole(roleName,name);toast("登录成功");if(roleName==="STUDENT"){loadStats();loadTasks();loadMyFeedback()}else if(roleName==="INSTRUCTOR"){loadStudents();loadSubmissions()}else{loadUsers();loadAuditCourses()}loadQuizzes()}
+async function submitAuth(){var mode=window.authMode||"login",email=document.getElementById("loginEmail").value.trim(),password=document.getElementById("loginPassword").value,status=document.getElementById("loginStatus");status.textContent="登录中…";try{var login;if(mode==="register"){login=await apiRequest("/auth/register",{method:"POST",body:JSON.stringify({name:document.getElementById("loginName").value.trim(),email:email,password:password,role:document.getElementById("registerRole").value,phone:document.getElementById("loginPhone").value.trim()||null})})}else{login=await apiRequest("/auth/login",{method:"POST",body:JSON.stringify({email:email,password:password})})}await enterWorkspace(login)}catch(error){status.textContent="操作失败："+(error.message||"请检查后端服务")}}
+
+function logout(){accessToken="";currentUser={};localStorage.removeItem("zhixue_access_token");backendConnected=false;document.getElementById("profileMenu").classList.remove("open");document.getElementById("appShell").style.display="none";document.getElementById("loginGate").style.display="grid";document.getElementById("apiStatus").textContent="离线";document.getElementById("apiStatus").classList.remove("connected")}
+
+var courses=[{title:"HTML/CSS 网页设计入门",desc:"从标签、选择器到响应式页面",cat:"前端开发",color:"coral",lessons:24,time:"8 周",rating:"4.9",students:"12.8k",mark:"</>"},{title:"JavaScript 编程基础",desc:"从变量、函数到网页交互",cat:"编程基础",color:"blue",lessons:18,time:"6 周",rating:"4.8",students:"8.6k",mark:"JS"},{title:"Python 零基础入门",desc:"从变量、条件判断到实用小程序",cat:"编程基础",color:"purple",lessons:16,time:"5 周",rating:"4.7",students:"9.1k",mark:"Py"},{title:"Git 版本控制入门",desc:"掌握提交、分支和团队协作",cat:"工程基础",color:"mint",lessons:22,time:"7 周",rating:"4.9",students:"16.4k",mark:"∿"},{title:"SQL 数据库基础",desc:"学会查询、筛选和管理数据",cat:"数据库",color:"yellow",lessons:12,time:"3 周",rating:"4.8",students:"7.2k",mark:"SQL"},{title:"软件测试基础",desc:"理解测试用例、缺陷和质量保障",cat:"软件工程",color:"indigo",lessons:20,time:"6 周",rating:"4.9",students:"11.6k",mark:"✓"},{title:"TypeScript 类型编程",desc:"为 JavaScript 项目增加可靠类型",cat:"前端开发",color:"blue",lessons:14,time:"4 周",rating:"4.8",students:"6.3k",mark:"TS"},{title:"React 组件化开发",desc:"使用组件构建现代 Web 界面",cat:"前端开发",color:"coral",lessons:26,time:"8 周",rating:"4.9",students:"10.4k",mark:"R"},{title:"Node.js 服务端开发",desc:"从接口到鉴权构建后端服务",cat:"后端开发",color:"mint",lessons:22,time:"7 周",rating:"4.8",students:"8.1k",mark:"N"},{title:"REST API 设计实践",desc:"设计清晰、稳定、易维护的接口",cat:"软件工程",color:"indigo",lessons:10,time:"3 周",rating:"4.7",students:"5.6k",mark:"API"},{title:"Docker 容器基础",desc:"掌握镜像、容器与部署流程",cat:"工程基础",color:"purple",lessons:12,time:"4 周",rating:"4.8",students:"4.9k",mark:"◇"},{title:"UML 软件建模",desc:"用类图和时序图表达系统设计",cat:"软件工程",color:"yellow",lessons:15,time:"5 周",rating:"4.7",students:"3.8k",mark:"U"}];
+try{var savedLocalCourses=JSON.parse(localStorage.getItem("zhixue_local_courses")||"[]");if(Array.isArray(savedLocalCourses)&&savedLocalCourses.length)courses=courses.concat(savedLocalCourses)}catch(e){}
+function persistLocalCourses(){localStorage.setItem("zhixue_local_courses",JSON.stringify(courses.filter(function(c){return c.localOnly})))}
+function card(c,i){return '<article class="card" onclick="openCourse('+i+')"><div class="art '+c.color+'"><strong>'+c.mark+'</strong><small>LEARN</small></div><div class="body"><span class="tag">'+c.cat+'</span><span class="rating">★ '+c.rating+'</span><h3>'+c.title+'</h3><p>'+c.desc+'</p><div class="meta">◷ '+c.time+'　 ▤ '+c.lessons+' 课时　 ♙ '+c.students+'</div><div class="link" style="margin-top:15px">查看课程　↗</div></div></article>'}
+function render(){document.getElementById("homeGrid").innerHTML=courses.slice(0,3).map(function(c){return card(c,courses.indexOf(c))}).join("");var joined=courses.filter(function(c){return c.enrollmentId});document.getElementById("learningGrid").innerHTML=joined.length?joined.map(function(c){return card(c,courses.indexOf(c))}).join(""): '<div class="panel" style="grid-column:1/-1;text-align:center;padding:55px"><h3>还没有加入课程</h3><p style="color:#8795a7;font-size:11px">去课程中心选择一门课程开始学习。</p><button class="primary" onclick="switchView(&quot;catalog&quot;)">浏览课程</button></div>';renderCatalog("");renderContinue();renderOrb()}
+function renderCatalog(q,cats,sort){var kw=(q||"").toLowerCase();var list=courses.filter(function(c){var matchKw=(c.title+c.desc+c.cat).toLowerCase().indexOf(kw)>-1;var matchCat=!cats||!cats.length||cats.some(function(cat){return (c.cat||"").indexOf(cat)>-1});return matchKw&&matchCat});if(sort==="rating"){list=list.slice().sort(function(a,b){return Number(b.rating)-Number(a.rating)})}document.getElementById("catalogGrid").innerHTML=list.map(function(c){return card(c,courses.indexOf(c))}).join("")||'<div class="panel" style="grid-column:1/-1;text-align:center;padding:60px">没有找到匹配课程，请换一个关键词。</div>'}
+function openCourse(i){var c=courses[i],isStudent=currentRole==="STUDENT",isTeacher=currentRole==="INSTRUCTOR",canEnroll=isStudent&&!c.enrollmentId,action=isStudent?(canEnroll?"加入学习":"开始学习"):isTeacher?"管理课程":"审核课程",handler=isStudent?(canEnroll?"enroll":"startCourse"):isTeacher?"manageCourse":"reviewCourse";document.getElementById("modalRoot").innerHTML='<div class="modal-bg" onclick="closeModal()"><div class="modal" onclick="event.stopPropagation()"><button class="modal-close" onclick="closeModal()">×</button><div class="art '+c.color+'"><strong>'+c.mark+'</strong><small>LEARN</small></div><div class="modal-body"><span class="tag">'+c.cat+'</span><h2>'+c.title+'</h2><p>'+c.desc+'</p><div class="modal-stats"><div><small>课程评分</small><b>★ '+c.rating+'</b></div><div><small>课程时长</small><b>'+c.time+'</b></div><div><small>包含课时</small><b>'+c.lessons+' 节</b></div></div><p>'+ (isStudent?'课程包含视频讲解、动手练习和阶段测验。':isTeacher?'可查看课程内容、课时安排和学习者数据。':'可查看课程状态、发布信息和审核记录。') +'</p><button class="primary" onclick="'+handler+'('+i+')">'+action+'　→</button></div></div></div>'}
+function closeModal(){document.getElementById("modalRoot").innerHTML=""}
+async function enroll(i){var c=courses[i];if(!c.backendId){c.enrollmentId="local";closeModal();render();toast("已加入学习");return}try{var item=await apiRequest("/enrollments/courses/"+c.backendId,{method:"POST"});c.enrollmentId=item.id||"joined";closeModal();render();toast("已加入学习")}catch(error){toast(error.message||"加入学习失败")}}
+function startCourse(i){closeModal();resumeCourse(courses[i])}
+function resumeCourseById(enrollmentId){resumeCourse(courses.filter(function(x){return x.enrollmentId===enrollmentId})[0])}
+async function resumeCourse(c){if(!c||!c.backendId){toast("该课程暂无课时内容");switchView("learning");return}try{var detail=await apiRequest("/courses/"+c.backendId);openCourseLearning(c,detail.lessons||[])}catch(error){toast(error.message||"加载课程失败");switchView("learning")}}
+function openCourseLearning(c,lessons){var completed=Number(c.completedLessons||0);var pct=Number(c.progress||0);var html='<div class="modal-bg" onclick="closeModal()"><div class="modal" onclick="event.stopPropagation()"><button class="modal-close" onclick="closeModal()">×</button><div class="modal-body"><span class="eyebrow">COURSE LEARNING</span><h2>'+escapeHtml(c.title)+'</h2><p>共 '+lessons.length+' 课时 · 已完成 '+completed+' 课时</p><div class="line"><i style="width:'+pct+'%"></i></div><div style="margin-top:18px;max-height:340px;overflow:auto">';lessons.forEach(function(l,idx){var done=idx<completed;html+='<div class="option" style="display:flex;justify-content:space-between;align-items:center"><span>'+(done?'✓ ':'')+escapeHtml(l.title||('第 '+(idx+1)+' 课'))+'</span>'+(done?'<span class="done-badge">已完成</span>':'<button class="primary" onclick="learnLesson('+c.enrollmentId+','+(idx+1)+')">学习并完成</button>')+'</div>'});html+='</div></div></div></div>';document.getElementById("modalRoot").innerHTML=html}
+async function learnLesson(enrollmentId,target){var c=courses.filter(function(x){return x.enrollmentId===enrollmentId})[0];if(!c)return;try{var updated=await apiRequest("/enrollments/"+enrollmentId+"/progress",{method:"PATCH",body:JSON.stringify({completedLessons:target})});c.completedLessons=Number(updated.progress&&updated.progress.completedLessons||target);c.totalLessons=Number(updated.progress&&updated.progress.totalLessons||c.totalLessons||c.lessons||0);c.progress=Number(updated.progressPercent||0);render();loadStats();var detail=await apiRequest("/courses/"+c.backendId);openCourseLearning(c,detail.lessons||[]);toast(c.progress>=100?"恭喜，这门课已全部完成":"已完成第 "+target+" 课")}catch(error){toast(error.message||"更新失败")}}
+function escapeHtml(value){return String(value==null?"":value).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;")}
+async function openCourseForm(i){var isNew=i<0,c=isNew?{title:"",desc:"",cat:"软件工程",rating:"4.8",price:0,status:"DRAFT"}:courses[i];var lessons=[];if(c.backendId){try{var detail=await apiRequest("/courses/"+c.backendId);lessons=detail.lessons||[]}catch(e){}}var lessonBlock=c.backendId?'<div class="login-field"><label>课时管理（'+lessons.length+' 课时）</label><div style="max-height:150px;overflow:auto;border:1px solid var(--line);border-radius:8px;padding:8px;margin-bottom:8px">'+(lessons.length?lessons.map(function(l){return '<div style="font-size:11px;padding:5px 0;border-bottom:1px solid #f0f2f7">'+(l.orderNumber||'?')+'. '+escapeHtml(l.title)+'</div>'}).join(""):'<div style="color:#8795a7;font-size:11px;padding:6px 0">还没有课时，请在下方添加，学生才能学习这门课</div>')+'</div><div style="display:flex;gap:8px"><input id="lessonTitle" placeholder="输入课时标题，如：HTML 文档结构" style="flex:1;height:40px;border:1px solid var(--line);border-radius:8px;padding:0 10px;outline:0;font-size:12px"><button class="primary" onclick="addCourseLesson('+i+')">添加课时</button></div></div>':'<div class="login-field"><label>课时管理</label><div style="color:#8795a7;font-size:11px">请先保存课程，保存后再次编辑即可添加课时</div></div>';document.getElementById("modalRoot").innerHTML='<div class="modal-bg" onclick="closeModal()"><div class="modal" onclick="event.stopPropagation()"><button class="modal-close" onclick="closeModal()">×</button><div class="modal-body"><span class="eyebrow">COURSE MANAGEMENT</span><h2>'+(isNew?"新增课程":"编辑课程")+'</h2><div class="login-field"><label>课程名称</label><input id="manageTitle" value="'+escapeHtml(c.title)+'" placeholder="例如：React 组件化开发"></div><div class="login-field"><label>课程简介</label><input id="manageDesc" value="'+escapeHtml(c.desc)+'" placeholder="课程内容简介"></div><div class="login-field"><label>课程分类</label><input id="manageCat" value="'+escapeHtml(c.cat)+'" placeholder="前端开发 / 软件工程"></div><div class="login-field"><label>课程评分</label><input id="manageRating" type="number" step="0.1" min="0" max="5" value="'+escapeHtml(c.rating||"4.8")+'"></div>'+lessonBlock+'<div style="display:flex;gap:10px;flex-wrap:wrap"><button class="primary" onclick="saveCourse('+(isNew?-1:i)+')">保存课程</button>'+(isNew?'':'<button class="pill" onclick="publishCourse('+i+')">发布课程</button>')+'</div></div></div></div>'}
+async function addCourseLesson(i){var c=courses[i];if(!c||!c.backendId){toast("请先保存课程");return}var title=document.getElementById("lessonTitle").value.trim();if(!title){toast("请输入课时标题");return}try{var detail=await apiRequest("/courses/"+c.backendId);var order=(detail.lessons||[]).length+1;await apiRequest("/courses/"+c.backendId+"/lessons",{method:"POST",body:JSON.stringify({title:title,orderNumber:order,isPublished:true})});toast("课时已添加");openCourseForm(i)}catch(error){toast(error.message||"添加失败")}}
+function openCreateCourse(){if(currentRole!=="INSTRUCTOR"&&currentRole!=="ADMIN"){toast("只有教师或管理员可以新增课程");return}openCourseForm(-1)}
+function manageCourse(i){closeModal();openCourseForm(i)}
+async function saveCourse(i){var title=document.getElementById("manageTitle").value.trim(),desc=document.getElementById("manageDesc").value.trim(),cat=document.getElementById("manageCat").value.trim()||"软件工程",rating=Number(document.getElementById("manageRating").value||4.8);if(!title||!desc){toast("请填写课程名称和简介");return}var body={title:title,description:desc,tags:cat.split(/[,，]/).map(function(x){return x.trim()}).filter(Boolean),price:0,rating:rating};try{if(i<0){var created=await apiRequest("/courses",{method:"POST",body:JSON.stringify(body)});courses.unshift(mapBackendCourse(created));closeModal();render();toast("课程已保存到平台")}else if(courses[i].backendId){var updated=await apiRequest("/courses/"+courses[i].backendId,{method:"PATCH",body:JSON.stringify(body)});courses[i]=Object.assign(courses[i],mapBackendCourse(updated));closeModal();render();toast("课程已保存到平台")}else{courses[i].title=title;courses[i].desc=desc;courses[i].cat=cat;courses[i].rating=String(rating);courses[i].localOnly=true;persistLocalCourses();closeModal();render();toast("课程已保存")}}catch(error){var localCourse={title:title,desc:desc,cat:cat,color:"coral",lessons:12,time:"4 周",rating:String(rating),students:"—",mark:"✦",status:"DRAFT",localOnly:true};if(i<0){courses.unshift(localCourse)}else{courses[i]=Object.assign(courses[i],{title:title,desc:desc,cat:cat,rating:String(rating),localOnly:true})}persistLocalCourses();closeModal();render();toast("后端暂不可用，已保存在当前网页")}}
+async function publishCourse(i){var c=courses[i];if(!c.backendId){c.status="PUBLISHED";closeModal();render();toast("课程已发布");return}try{await apiRequest("/courses/"+c.backendId+"/publish",{method:"POST"});c.status="PUBLISHED";closeModal();render();toast("课程已发布")}catch(error){toast(error.message||"发布失败")}}
+function reviewCourse(i){closeModal();switchView("roles");role("admin");toast("已打开课程审核") }
+async function submitStudentQuiz(){if(!currentQuiz){toast("请先选择一个测验");return}var answers=[];currentQuiz.questions.forEach(function(q,i){var sel=document.querySelector('input[name="q'+i+'"]:checked');answers.push(sel?sel.value:"")});if(answers.some(function(a){return !a})){toast("请完成所有题目");return}try{var result=await apiRequest("/quizzes/"+currentQuiz.id+"/submit",{method:"POST",body:JSON.stringify({answers:answers})});toast("测验已提交，得分 "+(result.total>0?Math.round(result.score/result.total*100):0)+" 分（满分 100）")}catch(error){toast(error.message||"提交失败")}}
+function openUserEditor(id,name,email,role){id=id||null;name=name||"";email=email||"";role=role||"STUDENT";document.getElementById("modalRoot").innerHTML='<div class="modal-bg" onclick="closeModal()"><div class="modal" onclick="event.stopPropagation()"><button class="modal-close" onclick="closeModal()">×</button><div class="modal-body"><span class="eyebrow">USER MANAGEMENT</span><h2>'+(id?"编辑用户":"新增用户")+'</h2><div class="login-field"><label>姓名</label><input id="userName" value="'+escapeHtml(name)+'" placeholder="输入姓名"></div><div class="login-field"><label>邮箱</label><input id="userEmail" value="'+escapeHtml(email)+'" placeholder="输入邮箱"></div><div class="login-field"><label>角色</label><select id="userRole" style="height:44px;width:100%;border:1px solid var(--line);border-radius:8px;padding:0 10px"><option value="STUDENT" '+(role==="STUDENT"?"selected":"")+'>学生</option><option value="INSTRUCTOR" '+(role==="INSTRUCTOR"?"selected":"")+'>教师</option><option value="ADMIN" '+(role==="ADMIN"?"selected":"")+'>管理员</option></select></div>'+(id?'':'<div class="login-field"><label>初始密码</label><input id="userPassword" type="password" placeholder="至少 8 位"></div>')+'<button class="primary" onclick="saveUser('+(id||0)+')">保存用户</button></div></div></div>'}
+async function saveUser(id){var name=document.getElementById("userName").value.trim(),email=document.getElementById("userEmail").value.trim(),role=document.getElementById("userRole").value;if(!name||!email){toast("请填写姓名和邮箱");return}try{if(id){await apiRequest("/users/"+id,{method:"PATCH",body:JSON.stringify({name:name,email:email,role:role})})}else{var password=document.getElementById("userPassword").value;if(!password||password.length<8){toast("密码至少 8 位");return}await apiRequest("/users",{method:"POST",body:JSON.stringify({name:name,email:email,password:password,role:role})})}closeModal();loadUsers();toast("用户已保存")}catch(error){toast(error.message||"保存失败")}}
+async function toggleUserStatus(id,currentStatus){var next=currentStatus==="ACTIVE"?"DISABLED":"ACTIVE";try{await apiRequest("/users/"+id+"/status",{method:"PATCH",body:JSON.stringify({status:next})});loadUsers();toast(next==="DISABLED"?"用户已停用":"用户已启用")}catch(error){toast(error.message||"操作失败")}}
+async function approveCourse(id){try{await apiRequest("/courses/"+id+"/publish",{method:"POST"});loadAuditCourses();toast("课程已审核通过")}catch(error){toast(error.message||"操作失败")}}
+async function rejectCourse(id){try{await apiRequest("/courses/"+id+"/reject",{method:"POST"});loadAuditCourses();toast("已退回课程")}catch(error){toast(error.message||"操作失败")}}
+async function archiveCourse(id){try{await apiRequest("/courses/"+id+"/archive",{method:"POST"});loadAuditCourses();toast("课程已下架")}catch(error){toast(error.message||"操作失败")}}
+var quizQCount=0;
+function quizQBlock(i){return '<div style="border:1px solid var(--line);border-radius:8px;padding:12px;margin:10px 0"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><b>第 '+(i+1)+' 题</b>'+(i>0?'<button type="button" class="link" onclick="removeQuizQ('+i+')">删除</button>':'')+'</div><input id="qContent'+i+'" placeholder="题目内容" style="width:100%;height:36px;border:1px solid var(--line);border-radius:6px;padding:0 10px;margin-bottom:6px;font-size:12px"><input id="qA'+i+'" placeholder="选项 A" style="width:100%;height:34px;border:1px solid var(--line);border-radius:6px;padding:0 10px;margin-bottom:6px;font-size:12px"><input id="qB'+i+'" placeholder="选项 B" style="width:100%;height:34px;border:1px solid var(--line);border-radius:6px;padding:0 10px;margin-bottom:6px;font-size:12px"><input id="qC'+i+'" placeholder="选项 C" style="width:100%;height:34px;border:1px solid var(--line);border-radius:6px;padding:0 10px;margin-bottom:6px;font-size:12px"><select id="qAns'+i+'" style="width:100%;height:34px;border:1px solid var(--line);border-radius:6px;padding:0 10px;font-size:12px"><option>A</option><option>B</option><option>C</option></select></div>'}
+function openQuizEditor(){quizQCount=1;document.getElementById("modalRoot").innerHTML='<div class="modal-bg" onclick="closeModal()"><div class="modal" onclick="event.stopPropagation()"><button class="modal-close" onclick="closeModal()">×</button><div class="modal-body" style="max-height:85vh;overflow:auto"><span class="eyebrow">QUIZ EDITOR</span><h2>新建测验</h2><div class="login-field"><label>测验标题</label><input id="quizTitle" placeholder="例如：JavaScript 基础测验"></div><div id="quizQuestions">'+quizQBlock(0)+'</div><button type="button" class="pill" style="width:100%;margin:12px 0" onclick="addQuizQ()">＋ 添加一道题</button><button class="primary" onclick="saveQuiz()">保存测验</button></div></div></div>'}
+function addQuizQ(){var i=quizQCount++;document.getElementById("quizQuestions").insertAdjacentHTML("beforeend",quizQBlock(i))}
+function removeQuizQ(idx){var blocks=document.querySelectorAll("#quizQuestions > div");if(blocks[idx])blocks[idx].remove()}
+async function saveQuiz(){var title=document.getElementById("quizTitle").value.trim();if(!title){toast("请填写测验标题");return}var questions=[];for(var i=0;i<quizQCount;i++){var cEl=document.getElementById("qContent"+i);if(!cEl)continue;var c=cEl.value.trim(),a=document.getElementById("qA"+i).value.trim(),b=document.getElementById("qB"+i).value.trim(),cc=document.getElementById("qC"+i).value.trim(),ans=document.getElementById("qAns"+i).value;if(!c||!a||!b||!cc){toast("请完整填写第 "+(i+1)+" 题");return}questions.push({content:c,options:[a,b,cc],answer:ans})}if(!questions.length){toast("请至少添加一道题");return}try{await apiRequest("/quizzes",{method:"POST",body:JSON.stringify({title:title,questions:questions})});closeModal();loadQuizzes();toast("测验已保存")}catch(error){toast(error.message||"保存失败")}}
+function openStudentDetail(name,course,progress,lastStudy){document.getElementById("modalRoot").innerHTML='<div class="modal-bg" onclick="closeModal()"><div class="modal" onclick="event.stopPropagation()"><button class="modal-close" onclick="closeModal()">×</button><div class="modal-body"><span class="eyebrow">STUDENT DETAIL</span><h2>'+name+'</h2><div class="modal-stats"><div><small>正在学习</small><b>'+course+'</b></div><div><small>完成度</small><b>'+progress+'</b></div><div><small>最近学习</small><b>'+lastStudy+'</b></div></div><p>可以继续关注该学生的课程进度，并发送针对性学习反馈。</p><button class="primary" onclick="toast(&quot;反馈已发送给'+name+'&quot;);closeModal()">发送反馈</button></div></div></div>'}
+function openFeedback(id){var s=submissionsList.filter(function(x){return x.id===id})[0];if(!s)return;var studentName=s.user?s.user.name:"学生";var title=s.quiz?s.quiz.title:"测验";var pct=s.total>0?Math.round(s.score/s.total*100):0;var questions=s.quiz&&s.quiz.questions?s.quiz.questions:[];var letters=["A","B","C","D","E"];var detailHtml='';if(questions.length){detailHtml='<div style="max-height:260px;overflow:auto;border:1px solid var(--line);border-radius:8px;padding:10px;margin-top:14px">';questions.forEach(function(q,i){var given=(s.answers&&s.answers[i])||"";var ok=(given||"").toUpperCase()===String(q.answer).toUpperCase();var gtxt=given?(letters.indexOf(given)>=0?given+'. '+escapeHtml(q.options[letters.indexOf(given)]||""):given):"未作答";var atxt=String(q.answer)+'. '+escapeHtml(q.options[letters.indexOf(String(q.answer))]||"");detailHtml+='<div style="margin-bottom:10px;padding:9px;border-radius:8px;background:'+(ok?'#e9f8f1':'#fff0eb')+'"><b style="font-size:11px">'+(i+1)+'. '+escapeHtml(q.content)+'</b><div style="font-size:10px;color:#71829a;margin-top:5px;line-height:1.7">学生答案：'+gtxt+(ok?' <span style="color:#2d9369">✓ 正确</span>':' <span style="color:#cf694f">✗ 错误</span>')+'<br>正确答案：'+atxt+'</div></div>'});detailHtml+='</div>'}document.getElementById("modalRoot").innerHTML='<div class="modal-bg" onclick="closeModal()"><div class="modal" onclick="event.stopPropagation()"><button class="modal-close" onclick="closeModal()">×</button><div class="modal-body" style="max-height:85vh;overflow:auto"><span class="eyebrow">GRADING</span><h2>'+escapeHtml(title)+'</h2><div class="modal-stats"><div><small>学生</small><b>'+escapeHtml(studentName)+'</b></div><div><small>得分</small><b>'+pct+' 分（答对 '+s.score+' / '+s.total+' 题）</b></div></div>'+detailHtml+'<div class="login-field"><label>教师反馈</label><textarea id="feedbackText" placeholder="写下本次测验的反馈" style="width:100%;min-height:80px;border:1px solid var(--line);border-radius:8px;padding:10px;resize:vertical">'+escapeHtml(s.feedback||"")+'</textarea></div><button class="primary" onclick="saveFeedback('+id+')">保存反馈</button></div></div></div>'}
+function toggleProfileMenu(event){if(event)event.stopPropagation();document.getElementById("profileMenu").classList.toggle("open")}
+function openProfile(type){document.getElementById("profileMenu").classList.remove("open");var name=currentUser.name||document.getElementById("currentUserName").textContent,email=currentUser.email||"",role=currentRole==="ADMIN"?"管理员":currentRole==="INSTRUCTOR"?"教师":"学生";if(type==="info"){document.getElementById("modalRoot").innerHTML='<div class="modal-bg" onclick="closeModal()"><div class="modal" onclick="event.stopPropagation()"><button class="modal-close" onclick="closeModal()">×</button><div class="modal-body"><span class="eyebrow">PROFILE</span><h2>个人资料</h2><div class="login-field"><label>姓名</label><input value="'+name+'" readonly></div><div class="login-field"><label>邮箱</label><input value="'+email+'" readonly></div><div class="login-field"><label>角色</label><input value="'+role+'" readonly></div><button class="primary" onclick="closeModal()">完成</button></div></div></div>'}else{document.getElementById("modalRoot").innerHTML='<div class="modal-bg" onclick="closeModal()"><div class="modal" onclick="event.stopPropagation()"><button class="modal-close" onclick="closeModal()">×</button><div class="modal-body"><span class="eyebrow">SECURITY</span><h2>修改密码</h2><div class="login-field"><label>当前密码</label><input id="oldPassword" type="password" placeholder="请输入当前密码"></div><div class="login-field"><label>新密码</label><input id="newPassword" type="password" placeholder="至少 8 位"></div><div class="login-field"><label>确认新密码</label><input id="confirmPassword" type="password" placeholder="再次输入新密码"></div><button class="primary" onclick="savePassword()">保存新密码</button></div></div></div>'}}
+async function savePassword(){var oldPassword=document.getElementById("oldPassword").value,a=document.getElementById("newPassword").value,b=document.getElementById("confirmPassword").value;if(!oldPassword||!a||a.length<8){toast("请完整填写密码");return}if(a!==b){toast("两次输入的密码不一致");return}try{await apiRequest("/auth/password",{method:"PATCH",body:JSON.stringify({currentPassword:oldPassword,newPassword:a})});closeModal();toast("密码修改成功")}catch(error){toast(error.message||"密码修改失败")}}
+document.addEventListener("click",function(e){var wrap=document.querySelector(".profile-wrap");if(wrap&&!wrap.contains(e.target))document.getElementById("profileMenu").classList.remove("open")})
+function switchView(id){document.querySelectorAll(".view").forEach(function(v){v.classList.remove("active")});document.getElementById(id).classList.add("active");document.querySelectorAll("nav button").forEach(function(b){b.classList.toggle("active",b.dataset.view===id)});var b=document.querySelector('nav button[data-view="'+id+'"]');document.getElementById("crumb").textContent=b?b.textContent.trim():"学习总览";scrollTo(0,0);if(id==="teacherStudents")loadStudents();if(id==="teacherFeedback")loadSubmissions();if(id==="adminUsers")loadUsers();if(id==="adminAudit")loadAuditCourses();if(id==="quiz"){loadQuizzes();loadMyFeedback()}if(id==="planner")loadTasks()}
+document.querySelectorAll("nav button").forEach(function(b){b.onclick=function(){switchView(b.dataset.view)}});document.querySelectorAll("[data-go]").forEach(function(b){b.onclick=function(){switchView(b.dataset.go)}});document.getElementById("catalogSearch").oninput=function(){applyFilters()};
+var roleText={student:'<h2>学生端 · 林同学</h2><p>浏览课程、开始学习、制定计划、参加测验，并查看自己的学习进度。</p><table class="table"><tr><th>核心功能</th><th>状态</th><th>用户故事</th></tr><tr><td>课程搜索与浏览</td><td>已完成</td><td>US-01</td></tr><tr><td>开始学习课程</td><td>已完成</td><td>US-02</td></tr><tr><td>学习进度追踪</td><td>进行中</td><td>US-03</td></tr></table>',teacher:'<h2>教师端 · 王老师</h2><p>管理课程内容，并查看学生的学习情况。</p><table class="table"><tr><th>学生</th><th>正在学习</th><th>完成度</th><th>最近学习</th></tr><tr><td>林同学</td><td>HTML/CSS 网页设计入门</td><td>68%</td><td>今天</td></tr><tr><td>张同学</td><td>JavaScript 编程基础</td><td>42%</td><td>昨天</td></tr><tr><td>陈同学</td><td>Python 零基础入门</td><td>85%</td><td>10 月 18 日</td></tr></table>',admin:'<h2>管理员端 · 系统管理</h2><p>维护用户角色、课程状态与平台运行数据。</p><table class="table"><tr><th>平台指标</th><th>今日数据</th><th>状态</th></tr><tr><td>注册学习者</td><td>2,480</td><td>正常</td></tr><tr><td>已发布课程</td><td>36</td><td>正常</td></tr><tr><td>系统服务</td><td>99.9%</td><td>稳定</td></tr></table>'};
+function role(r){document.getElementById("roleContent").innerHTML=roleText[r];document.querySelectorAll(".role-tabs button").forEach(function(b){b.classList.toggle("active",b.dataset.role===r)})}document.querySelectorAll(".role-tabs button").forEach(function(b){b.onclick=function(){role(b.dataset.role)}});render();role("student");window.authMode="login";document.querySelectorAll(".auth-tab").forEach(function(tab){tab.onclick=function(){window.authMode=tab.dataset.mode;document.querySelectorAll(".auth-tab").forEach(function(x){x.classList.remove("active")});tab.classList.add("active");var reg=window.authMode==="register";document.getElementById("nameField").style.display=reg?"block":"none";document.getElementById("roleField").style.display=reg?"block":"none";document.getElementById("phoneField").style.display=reg?"block":"none";document.getElementById("accountList").style.display=reg?"none":"grid";document.getElementById("authTitle").textContent=reg?"创建WLearn智学账号":"登录学习工作台";document.getElementById("authSubtitle").textContent=reg?"注册后即可进入学习工作台。":"登录后进入学习工作台。";document.getElementById("loginSubmit").textContent=reg?"注册并进入":"登录"}});document.querySelectorAll(".account-choice").forEach(function(btn){btn.onclick=function(){document.querySelectorAll(".account-choice").forEach(function(x){x.classList.remove("active")});btn.classList.add("active");var a={student:["student@zhixue.local","Student123!"],teacher:["teacher@zhixue.local","Teacher123!"],admin:["admin@zhixue.local","Admin123!"]}[btn.dataset.account];document.getElementById("loginEmail").value=a[0];document.getElementById("loginPassword").value=a[1]}});document.getElementById("loginSubmit").onclick=submitAuth;document.getElementById("togglePassword").onclick=function(){var input=document.getElementById("loginPassword");var show=input.type==="password";input.type=show?"text":"password";this.textContent=show?"隐藏":"显示"};
+function renderStudentStats(){var stats=document.querySelector("#home .stats");if(!stats)return;var joined=courses.filter(function(c){return c.enrollmentId}).length;stats.innerHTML='<div class="stat"><span>学习完成度</span><b>'+(currentStats.progressPercent||0)+'%</b><small>真实学习进度</small></div><div class="stat"><span>我的课程</span><b>'+joined+'</b><small>已加入课程</small></div><div class="stat"><span>已学课时</span><b>'+(currentStats.completedLessons||0)+'</b><small>共 '+(currentStats.totalLessons||0)+' 课时</small></div><div class="stat"><span>学习积分</span><b>'+(currentStats.points||0)+'</b><small>按学习进度累计</small></div>';renderOrb()}
+async function loadStats(){try{currentStats=await apiRequest("/stats/me");renderStudentStats()}catch(e){}}
+async function syncProgress(){try{var p=await apiRequest("/progress/me");currentStats.progressPercent=p.progressPercent;currentStats.completedLessons=p.completedLessons;currentStats.totalLessons=p.totalLessons;renderStudentStats();render();toast("学习进度已同步")}catch(error){toast(error.message||"同步失败")}}
+async function loadTasks(){try{tasks=await apiRequest("/tasks")}catch(e){tasks=[]}renderPlanner()}
+function renderPlanner(){var el=document.getElementById("todoList");if(!el)return;if(!tasks.length){el.innerHTML='<div style="color:#8795a7;font-size:11px;padding:10px 0">暂无学习任务，点击"＋ 新建任务"添加。</div>';return}el.innerHTML=tasks.map(function(t){return '<label class="todo"><input type="checkbox" '+(t.completed?"checked":"")+' onchange="toggleTask('+t.id+',this.checked)"><span style="'+(t.completed?"text-decoration:line-through;color:#9aa7b7":"")+'">'+escapeHtml(t.title)+'</span><button class="link" style="margin-left:auto" onclick="deleteTask('+t.id+')">删除</button></label>'}).join("")}
+function openTaskForm(){document.getElementById("modalRoot").innerHTML='<div class="modal-bg" onclick="closeModal()"><div class="modal" onclick="event.stopPropagation()"><button class="modal-close" onclick="closeModal()">×</button><div class="modal-body"><span class="eyebrow">NEW TASK</span><h2>新建学习任务</h2><div class="login-field"><label>任务内容</label><input id="taskTitle" placeholder="例如：完成第 16 课视频"></div><div class="login-field"><label>截止日期（可选）</label><input id="taskDue" type="date"></div><button class="primary" onclick="addTask()">添加任务</button></div></div></div>'}
+async function addTask(){var title=document.getElementById("taskTitle").value.trim(),due=document.getElementById("taskDue").value;if(!title){toast("请填写任务内容");return}try{await apiRequest("/tasks",{method:"POST",body:JSON.stringify({title:title,dueDate:due||null})});closeModal();loadTasks();toast("任务已添加")}catch(error){toast(error.message||"添加失败")}}
+async function toggleTask(id,completed){try{await apiRequest("/tasks/"+id,{method:"PATCH",body:JSON.stringify({completed:completed})});tasks.forEach(function(t){if(t.id===id)t.completed=completed});renderPlanner()}catch(error){toast(error.message||"操作失败")}}
+async function deleteTask(id){try{await apiRequest("/tasks/"+id,{method:"DELETE"});loadTasks();toast("任务已删除")}catch(error){toast(error.message||"删除失败")}}
+async function loadQuizzes(){try{quizList=await apiRequest("/quizzes")}catch(e){quizList=[]}renderQuiz();renderTeacherQuizzes()}
+function renderTeacherQuizzes(){var el=document.getElementById("teacherQuizList");if(!el)return;if(!quizList.length){el.innerHTML='<div class="panel" style="text-align:center;padding:30px;color:#8795a7">还没有测验，点击右上角"＋ 新建测验"创建。</div>';return}el.innerHTML=quizList.map(function(q){var statusTag=q.status==="PUBLISHED"?'<span class="tag" style="background:#e9f7ef;color:#2d9369">已发布</span>':'<span class="tag" style="background:#fff7df;color:#a67b1e">草稿</span>';var action=q.status==="PUBLISHED"?'<span style="color:#8795a7;font-size:11px">学生端可见</span>':'<button class="primary" onclick="publishQuiz('+q.id+')">发布 →</button>';return '<div class="panel" style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap"><div><h3 style="margin:0 0 6px">'+escapeHtml(q.title)+'</h3><p style="color:#7d8da1;font-size:11px;margin:0">'+q.questionCount+' 题</p></div><div style="display:flex;align-items:center;gap:10px">'+statusTag+action+'</div></div>'}).join("")}
+async function publishQuiz(id){try{await apiRequest("/quizzes/"+id+"/publish",{method:"POST"});loadQuizzes();toast("测验已发布，学生端现在可见")}catch(error){toast(error.message||"发布失败")}}
+async function loadMyFeedback(){try{var list=await apiRequest("/quizzes/my-submissions");renderMyFeedback(list)}catch(e){renderMyFeedback([])}}
+function renderMyFeedback(list){var el=document.getElementById("myFeedbackList");if(!el)return;list=list||[];if(!list.length){el.innerHTML='<div class="section-head" style="margin-top:32px"><div><span class="eyebrow">MY QUIZ FEEDBACK</span><h2>我的测验反馈</h2></div></div><div class="panel" style="text-align:center;padding:30px;color:#8795a7">还没有提交记录，去上方做一套测验吧。</div>';return}var letters=["A","B","C","D","E"];el.innerHTML='<div class="section-head" style="margin-top:32px"><div><span class="eyebrow">MY QUIZ FEEDBACK</span><h2>我的测验反馈</h2></div></div>'+list.map(function(s){var title=s.quiz?s.quiz.title:"测验";var pct=s.total>0?Math.round(s.score/s.total*100):0;var questions=s.quiz&&s.quiz.questions?s.quiz.questions:[];var detail='';if(questions.length){detail='<div style="margin-top:10px;border-top:1px solid #f0f2f7;padding-top:10px">';questions.forEach(function(q,i){var given=(s.answers&&s.answers[i])||"";var ok=(given||"").toUpperCase()===String(q.answer).toUpperCase();detail+='<div style="font-size:10px;margin:4px 0;color:'+(ok?'#2d9369':'#cf694f')+'">'+(i+1)+'. '+(given?given+'. '+escapeHtml(q.options[letters.indexOf(given)]||given):'未作答')+(ok?' ✓':' ✗（正确答案 '+String(q.answer)+'）')+'</div>'});detail+='</div>'}var fb=s.feedback?'<div style="margin-top:10px;background:#f1efff;border-radius:8px;padding:10px;font-size:11px;color:#5b4fc1"><b>老师反馈：</b>'+escapeHtml(s.feedback)+'</div>':'<div style="margin-top:10px;color:#a7b0bc;font-size:11px">老师还没批改，稍后再来看看。</div>';return '<div class="panel" style="margin-bottom:12px"><span class="tag">'+pct+' 分</span><h3>'+escapeHtml(title)+'</h3><p style="color:#7d8da1;font-size:11px;margin:0">提交于 '+new Date(s.createdAt).toLocaleString()+'</p>'+detail+fb+'</div>'}).join("")}
+function renderQuiz(){var el=document.getElementById("quizList");if(!el)return;if(!quizList.length){el.innerHTML='<div style="text-align:center;padding:40px;color:#8795a7"><h3>暂无测验</h3><p style="font-size:11px">教师发布测验后会显示在这里。</p></div>';return}el.innerHTML=quizList.map(function(q){return '<div class="panel" style="margin-bottom:14px"><span class="tag">'+q.questionCount+' 题</span><h3>'+escapeHtml(q.title)+'</h3><p style="color:#7d8da1;font-size:11px">'+(q.status==="PUBLISHED"?'<button class="primary" onclick="openQuizById('+q.id+')">开始测验 →</button>':'<span class="tag" style="background:#fff7df;color:#a67b1e">草稿</span>')+'</p></div>'}).join("")}
+async function openQuizById(id){try{currentQuiz=await apiRequest("/quizzes/"+id);var panel=document.getElementById("quizList");if(!panel)return;var letters=["A","B","C","D","E"];panel.innerHTML='<span class="tag">进行中</span><h2>'+escapeHtml(currentQuiz.title)+'</h2><p>共 '+currentQuiz.questions.length+' 题 · 满分 100</p>'+currentQuiz.questions.map(function(q,i){return '<div class="question"><h3>'+(i+1)+'　'+escapeHtml(q.content)+'</h3>'+q.options.map(function(opt,j){return '<label class="option"><input type="radio" name="q'+i+'" value="'+letters[j]+'"> '+letters[j]+'. '+escapeHtml(opt)+'</label>'}).join("")+'</div>'}).join("")+'<button class="primary" onclick="submitStudentQuiz()">提交测验 →</button>'}catch(error){toast(error.message||"加载失败")}}
+async function loadStudents(){try{studentsList=await apiRequest("/students")}catch(e){studentsList=[]}renderStudents()}
+function renderStudents(){var el=document.getElementById("studentsTable");if(!el)return;if(!studentsList.length){el.innerHTML='<div style="text-align:center;padding:40px;color:#8795a7">暂无学生数据</div>';return}el.innerHTML='<table class="table"><tr><th>学生</th><th>学习课程</th><th>完成度</th><th>最近学习</th><th>操作</th></tr>'+studentsList.map(function(s){var last=s.lastStudyAt?new Date(s.lastStudyAt).toLocaleDateString():"—";return '<tr><td>'+escapeHtml(s.name)+'</td><td>'+escapeHtml(s.courseTitle)+'</td><td>'+s.progressPercent+'%</td><td>'+last+'</td><td><button class="link" onclick="openStudentDetail(\''+escapeHtml(s.name)+'\',\''+escapeHtml(s.courseTitle)+'\',\''+s.progressPercent+'%\',\''+last+'\')">查看详情</button></td></tr>'}).join("")+'</table>'}
+async function loadSubmissions(){try{submissionsList=await apiRequest("/quizzes/submissions")}catch(e){submissionsList=[]}renderFeedback()}
+function renderFeedback(){var el=document.getElementById("feedbackList");if(!el)return;if(!submissionsList.length){el.innerHTML='<div class="panel" style="text-align:center;padding:40px;color:#8795a7">暂无测验提交记录</div>';return}el.innerHTML=submissionsList.map(function(s){var name=s.user?s.user.name:"学生";var title=s.quiz?s.quiz.title:"测验";var done=s.feedback;var pct=s.total>0?Math.round(s.score/s.total*100):0;return '<div class="panel"><span class="tag" style="'+(done?'background:#e9f7ef;color:#2d9369':'')+'">'+(done?'已反馈':'待批改')+' · '+pct+' 分</span><h3>'+escapeHtml(title)+'</h3><p style="color:#7d8da1;font-size:11px">'+escapeHtml(name)+' · 答对 '+s.score+' / '+s.total+' 题 · 提交于 '+new Date(s.createdAt).toLocaleString()+'</p><div style="margin-top:18px"><button class="primary" onclick="openFeedback('+s.id+')">'+(done?'查看/修改反馈':'开始批改')+' →</button></div></div>'}).join("")}
+async function saveFeedback(id){var text=document.getElementById("feedbackText").value.trim();if(!text){toast("请填写反馈内容");return}try{await apiRequest("/quizzes/submissions/"+id+"/feedback",{method:"PATCH",body:JSON.stringify({feedback:text})});closeModal();loadSubmissions();toast("反馈已保存")}catch(error){toast(error.message||"保存失败")}}
+async function loadUsers(){try{usersList=await apiRequest("/users")}catch(e){usersList=[]}renderUsers()}
+function renderUsers(){var el=document.getElementById("usersTable");if(!el)return;if(!usersList.length){el.innerHTML='<div style="text-align:center;padding:40px;color:#8795a7">暂无用户</div>';return}var roleMap={STUDENT:"学生",INSTRUCTOR:"教师",ADMIN:"管理员"};el.innerHTML='<table class="table"><tr><th>用户</th><th>邮箱</th><th>角色</th><th>状态</th><th>操作</th></tr>'+usersList.map(function(u){var active=u.status!=="DISABLED";return '<tr><td>'+escapeHtml(u.name)+'</td><td>'+escapeHtml(u.email)+'</td><td>'+(roleMap[u.role]||u.role)+'</td><td><span class="done-badge" style="'+(active?'':'background:#fff0eb;color:#cf694f')+'">'+(active?'正常':'已停用')+'</span></td><td><button class="link" onclick="openUserEditor('+u.id+',\''+escapeHtml(u.name)+'\',\''+escapeHtml(u.email)+'\',\''+u.role+'\')">编辑</button> <button class="link" onclick="toggleUserStatus('+u.id+',\''+u.status+'\')">'+(active?'停用':'启用')+'</button></td></tr>'}).join("")+'</table>'}
+async function loadAuditCourses(){try{auditCourses=await apiRequest("/courses/admin")}catch(e){auditCourses=[]}renderAudit()}
+function renderAudit(){var el=document.getElementById("auditList");if(!el)return;if(!auditCourses.length){el.innerHTML='<div class="panel" style="text-align:center;padding:40px;color:#8795a7">暂无课程</div>';return}el.innerHTML=auditCourses.map(function(c){var lessons=c.lessons?c.lessons.length:0;if(c.status==="PUBLISHED"){return '<div class="panel"><span class="tag" style="background:#e9f7ef;color:#2d9369">已发布</span><h3>'+escapeHtml(c.title)+'</h3><p style="color:#7d8da1;font-size:11px">'+lessons+' 课时</p><button class="link" onclick="archiveCourse('+c.id+')">下架课程</button></div>'}if(c.status==="ARCHIVED"){return '<div class="panel"><span class="tag" style="background:#eef1f5;color:#8795a7">已下架</span><h3>'+escapeHtml(c.title)+'</h3><p style="color:#7d8da1;font-size:11px">'+lessons+' 课时</p><button class="link" onclick="approveCourse('+c.id+')">重新发布</button></div>'}return '<div class="panel"><span class="tag">待审核</span><h3>'+escapeHtml(c.title)+'</h3><p style="color:#7d8da1;font-size:11px">'+lessons+' 课时</p><button class="primary" onclick="approveCourse('+c.id+')">审核通过</button> <button class="link" onclick="rejectCourse('+c.id+')">退回修改</button></div>'}).join("")}
+function applyFilters(){var cats=[];document.querySelectorAll(".filters input[type=checkbox]:checked").forEach(function(x){if(x.dataset.cat)cats.push(x.dataset.cat)});var sort=document.querySelector('.filters input[type=radio]:checked');var sortVal=sort?sort.dataset.sort:"default";renderCatalog(document.getElementById("catalogSearch").value,cats,sortVal)}
+document.querySelectorAll(".filters input[type=checkbox]").forEach(function(cb){cb.onchange=function(){if(cb.dataset.cat===""){document.querySelectorAll(".filters input[type=checkbox]").forEach(function(x){x.checked=false});cb.checked=true}else{document.querySelector('.filters input[data-cat=""]').checked=false}applyFilters()}});
+document.querySelectorAll(".filters input[type=radio]").forEach(function(rb){rb.onchange=function(){applyFilters()}});
+var continueIndex=0;
+function continueCard(c,idx,count){var pct=Number(c.progress||0);var totalLessons=Number(c.totalLessons||c.lessons||0);var done=Math.min(Number(c.completedLessons||0),totalLessons);var remaining=Math.max(0,totalLessons-done);var artClass=c.color||"coral";var mark=c.mark||"</>";var canComplete=typeof c.enrollmentId==="number"&&pct<100;var idArg=typeof c.enrollmentId==="number"?c.enrollmentId:"'"+String(c.enrollmentId).replace(/'/g,"\\'")+"'";var switcher=count>1?'<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px"><button class="link" style="color:#aab9cc;padding:0;font-size:14px" onclick="switchContinue(-1)">◀</button><span style="color:#aab9cc;font-size:10px">'+(idx+1)+' / '+count+'</span><button class="link" style="color:#aab9cc;padding:0;font-size:14px" onclick="switchContinue(1)">▶</button></div>':'';return '<div class="continue"><div class="art '+artClass+'"><strong>'+mark+'</strong><small>'+pct+'% COMPLETE</small></div><div class="continue-info">'+switcher+'<span class="eyebrow">'+(pct>=100?'COURSE COMPLETED':'CONTINUE WHERE YOU LEFT OFF')+'</span><h2>'+escapeHtml(c.title)+'</h2><p>已完成 '+done+' / '+totalLessons+' 课时</p><div class="line"><i style="width:'+pct+'%"></i></div><div class="continue-foot"><span>已完成 '+pct+'% · 剩余 '+remaining+' 课时</span><span>'+(canComplete?'<button class="primary" onclick="completeLesson('+c.enrollmentId+')">完成一课</button> ':'')+'<button class="primary" style="background:#35ad91" onclick="resumeCourseById('+idArg+')">继续学习 →</button></span></div></div></div>'}
+function orderedContinueCourses(){var joined=courses.filter(function(c){return c.enrollmentId});var inProgress=joined.filter(function(c){return Number(c.progress||0)<100});return inProgress.concat(joined.filter(function(c){return Number(c.progress||0)>=100}))}
+function renderContinue(){var ordered=orderedContinueCourses();var html;if(ordered.length){if(continueIndex>=ordered.length)continueIndex=0;html=continueCard(ordered[continueIndex],continueIndex,ordered.length)}else{html='<div class="continue"><div class="art coral"><strong>✦</strong><small>START</small></div><div class="continue-info"><span class="eyebrow">CONTINUE WHERE YOU LEFT OFF</span><h2>还没有开始学习</h2><p>去课程中心选一门课程开始吧。</p><div class="continue-foot"><button class="primary" onclick="switchView(\'catalog\')">浏览课程 →</button></div></div></div>'}var homeEl=document.getElementById("homeContinue");var learnEl=document.getElementById("learningContinue");if(homeEl)homeEl.innerHTML=html;if(learnEl)learnEl.innerHTML=html}
+function switchContinue(delta){var ordered=orderedContinueCourses();if(!ordered.length)return;continueIndex=(continueIndex+delta+ordered.length)%ordered.length;renderContinue()}
+function renderOrb(){var orb=document.getElementById("homeOrb");if(orb)orb.textContent=(currentStats.progressPercent||0)+"%"}
+async function completeLesson(enrollmentId){if(!enrollmentId||enrollmentId==="local"){toast("该课程暂不支持在线更新进度");return}var c=courses.filter(function(x){return x.enrollmentId===enrollmentId})[0];if(!c)return;var total=Number(c.totalLessons||c.lessons||0);if(total<=0){toast("这门课还没有课时，请先让教师添加课时");return}if((Number(c.completedLessons)||0)>=total){toast("这门课已经全部完成了");return}var completed=Math.min((Number(c.completedLessons)||0)+1,total);try{var updated=await apiRequest("/enrollments/"+enrollmentId+"/progress",{method:"PATCH",body:JSON.stringify({completedLessons:completed})});c.completedLessons=Number(updated.progress&&updated.progress.completedLessons||completed);c.totalLessons=Number(updated.progress&&updated.progress.totalLessons||total);c.progress=Number(updated.progressPercent||0);render();loadStats();toast(c.progress>=100?"恭喜，这门课已全部完成":"已完成一课，进度 "+c.progress+"%")}catch(error){toast(error.message||"更新失败")}}</script></body></html>

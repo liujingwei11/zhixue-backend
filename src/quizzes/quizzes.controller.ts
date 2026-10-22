@@ -37,6 +37,11 @@ export class QuizzesController {
     return this.quizzes.listSubmissions();
   }
 
+  @Get('my-submissions')
+  mySubmissions(@CurrentUser() user: { id: number }) {
+    return this.quizzes.listMySubmissions(user.id);
+  }
+
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.quizzes.findOne(id);

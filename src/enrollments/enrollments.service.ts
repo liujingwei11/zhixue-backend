@@ -57,7 +57,8 @@ export class EnrollmentsService {
 
   async updateProgress(userId: number, id: number, dto: UpdateProgressDto) {
     const enrollment = await this.findOne(userId, id);
-    const total = enrollment.progress?.totalLessons ?? enrollment.course.lessons.length;
+    const liveTotal = enrollment.course?.lessons?.length ?? 0;
+    const total = liveTotal > 0 ? liveTotal : (enrollment.progress?.totalLessons ?? 0);
     const completed = Math.min(dto.completedLessons, total);
     const percent = calculateProgress(completed, total);
     enrollment.progressPercent = percent;

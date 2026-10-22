@@ -6,6 +6,6 @@ import { ApiTags } from '@nestjs/swagger';
 export class HealthController {
   @Get('health')
   health() {
-    return { status: 'ok', service: 'zhixue-cloud-backend', sprint: 'Sprint 1' };
+    return { status: 'ok', service: 'wlearn-zhixue-backend' };
   }
 }

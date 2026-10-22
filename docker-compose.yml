@@ -13,5 +13,21 @@ services:
     volumes:
       - zhixue_mysql_data:/var/lib/mysql
     command: --default-authentication-plugin=mysql_native_password
+
+  backend:
+    build: .
+    container_name: zhixue-backend
+    restart: unless-stopped
+    depends_on:
+      - mysql
+    environment:
+      DATABASE_HOST: mysql
+      DATABASE_PORT: 3306
+      DATABASE_USER: zhixue
+      DATABASE_PASS: zhixue_password
+      DATABASE_NAME: zhixue
+    ports:
+      - "3000:3000"
+
 volumes:
   zhixue_mysql_data:

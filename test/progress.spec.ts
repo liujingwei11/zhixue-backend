@@ -1,6 +1,6 @@
 import { calculateProgress } from '../src/common/progress';
 
-describe('Sprint 1 progress calculation', () => {
+describe('progress calculation', () => {
   it('calculates completed lessons / total lessons * 100', () => {
     expect(calculateProgress(4, 10)).toBe(40);
     expect(calculateProgress(16, 24)).toBe(66.67);

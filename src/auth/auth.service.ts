@@ -29,7 +29,8 @@ export class AuthService {
         name: dto.name,
         email: dto.email,
         passwordHash,
-        role: UserRole.STUDENT,
+        role: dto.role ?? UserRole.STUDENT,
+        phone: dto.phone ?? null,
         profile: dto.major ? { major: dto.major } : null,
       }),
     );
@@ -37,7 +38,10 @@ export class AuthService {
   }
 
   async login(dto: LoginDto) {
-    const user = await this.users.findOne({ where: { email: dto.email } });
+    let user = await this.users.findOne({ where: { email: dto.email } });
+    if (!user) {
+      user = await this.users.findOne({ where: { phone: dto.email } });
+    }
     if (!user || !(await bcrypt.compare(dto.password, user.passwordHash))) {
       throw new UnauthorizedException('Invalid email or password');
     }

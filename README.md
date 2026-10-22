@@ -1,4 +1,4 @@
-# 智学云后端 · Sprint 1
+# WLearn智学后端
 
 这是按照 Group 3 PPT 技术方案搭建的后端骨架：
 
@@ -49,7 +49,7 @@ npm run start:dev
 
 登录后，把返回的 accessToken 放到 Swagger 的 Authorize 中，或者放到 Postman 集合的 token 变量。
 
-## 4. Sprint 1 接口
+## 4. 接口
 
 | 方法 | 路径 | 作用 |
 |---|---|---|
