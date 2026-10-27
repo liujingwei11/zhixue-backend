@@ -19,7 +19,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          projectBaseDir: .
-          sonarOrganization: liujingwei11
-          sonarProjectKey: liujingwei11_zhixue-backend
+          SONAR_ORGANIZATION: liujingwei11
+          SONAR_PROJECT_KEY: liujingwei11_zhixue-backend
