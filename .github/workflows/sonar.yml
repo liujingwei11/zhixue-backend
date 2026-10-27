@@ -1,6 +1,5 @@
 name: SonarCloud Analysis
 
-# 触发条件：仅在 push 到 main 分支时运行
 on:
   push:
     branches:
@@ -12,33 +11,27 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. 检出代码
-      # fetch-depth: 0 是 SonarCloud 官方建议，拉取完整历史以提升分析准确性
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      # 2. 配置 Node.js 环境
-      # NestJS 后端需要 Node 环境，这里指定 Node 20
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
 
-      # 3. 安装依赖
-      # 使用 npm ci 基于 package-lock.json 做确定性安装，比 npm install 更适合 CI
-      # 如果项目没有 lock 文件，可改成 npm install
       - name: Install dependencies
-        run: npm install --no-audit --no-fund
+        run: npm ci
 
-      # 4. 执行 SonarCloud 扫描
-      # 这是官方 action，仓库地址已核对，不会报 repository not found
-      # SONAR_TOKEN 从 GitHub Secrets 读取，你之前已经配好了
-      # GITHUB_TOKEN 由 GitHub 自动提供，用于 PR 装饰等可选功能
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
+        with:
+          args: >
+            -Dsonar.projectKey=liujingwei11_zhixue-backend
+            -Dsonar.organization=liujingwei11
+            -Dsonar.sources=src
+            -Dsonar.exclusions=**/node_modules/**,**/dist/**
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
