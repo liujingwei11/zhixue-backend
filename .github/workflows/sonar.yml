@@ -31,7 +31,7 @@ jobs:
       # 使用 npm ci 基于 package-lock.json 做确定性安装，比 npm install 更适合 CI
       # 如果项目没有 lock 文件，可改成 npm install
       - name: Install dependencies
-        run: npm ci
+        run: npm install --no-audit --no-fund
 
       # 4. 执行 SonarCloud 扫描
       # 这是官方 action，仓库地址已核对，不会报 repository not found
